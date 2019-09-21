@@ -27,9 +27,9 @@ public class EntityManager {
 	}
 	
 	public void tickEntities() {
-		//System.out.println("---------");
+		addEntityList.clear();
+		removeEntityList.clear();
 		for(Entity e : entities) {
-			//System.out.println(e);
 			if(!e.isActive()) {
 				removeEntityList.add(e);
 			}
@@ -59,7 +59,29 @@ public class EntityManager {
 		
 		return false;
 	}
+	
+	public static boolean checkEntityCollisionWithBullet(Entity firer, Entity o) {
+		for(Entity e : entities) {
+			
+			if(e.equals(firer)) 
+				return false;
+			
+			if(o.getBounds().intersects(e.getBounds()))
+				return true;
+		}
+		
+		return false;
+	}
 
+	public static Entity returnEntityCollisions(Entity o) {
+		for(Entity e : entities) {
+			if(o.getBounds().intersects(e.getBounds()))
+				return e;
+		} 
+		
+		return null;
+	}
+	
 	public ArrayList<Entity> getAddEntityList() {
 		return addEntityList;
 	}

@@ -4,6 +4,7 @@ import java.awt.Graphics;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import battlegame.entities.Bullet;
 import battlegame.entities.Player;
 import battlegame.entities.entitymanager.EntityManager;
 import battlegame.utility.Utilities;

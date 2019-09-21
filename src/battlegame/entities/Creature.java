@@ -10,8 +10,8 @@ public abstract class Creature extends Entity {
 	protected float xSpeed, ySpeed;
 	protected float walkingSpeed = 0, jumpSpeed = 0;
 	protected float weight;
-	protected boolean affectedByFriction = true;
-	protected static final float gPerFrame = 0.1633333333333F;
+	protected int health = 10;
+	protected boolean affectedByFriction = true;	protected static final float gPerFrame = 0.1633333333333F;
 	protected boolean gravityOn = false;
 	protected Tile[][] tiles;
 	
@@ -25,6 +25,7 @@ public abstract class Creature extends Entity {
 			ySpeed += gPerFrame;
 		moveX();
 		moveY();
+		
 		x += xSpeed;
 		y += ySpeed;
 
@@ -71,6 +72,10 @@ public abstract class Creature extends Entity {
 
 	public float getySpeed() {
 		return ySpeed;
+	}
+
+	public int getHealth() {
+		return health;
 	}
 	
 	

@@ -9,7 +9,7 @@ import battlegame.world.World;
 
 public class Player extends Creature{
 	
-	private long lastAttackTimer, attackCooldown = 800, attackTimer = attackCooldown;	
+	private long lastAttackTimer, attackCooldown = 200, attackTimer = attackCooldown;	
 	public Player(float x, float y){
 		super(x, y, 32, 32, Assets.player);
 		walkingSpeed = 180 / 60;
@@ -18,6 +18,8 @@ public class Player extends Creature{
 
 	@Override
 	public void tick() {
+		if(health <= 0)
+			die();
 		getInput();
 		attack();
 		move();
@@ -52,7 +54,7 @@ public class Player extends Creature{
 			return;
 		
 		if(Main.getGame().getKeyController().o) {
-			World.getEntityManager().getAddEntityList().add(new Bullet(this.x + this.width + 1, this.y - 1));
+			World.getEntityManager().getAddEntityList().add(new Bullet(this.x + this.width + 1, this.y - 1, this));
 		}
 		
 		attackTimer = 0;
@@ -60,7 +62,7 @@ public class Player extends Creature{
 	
 	@Override
 	public void die() {
-		
+		active = false;
 	}
 
 }

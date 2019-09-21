@@ -11,6 +11,7 @@ public abstract class Entity {
 	protected float x , y;
 	protected int width, height;
 	protected BufferedImage texture;
+	protected int health = 10;
 	protected Rectangle bounds;
 	protected boolean active = true;
 	
@@ -56,6 +57,10 @@ public abstract class Entity {
 
 	public boolean isActive() {
 		return active;
+	}
+
+	public void damage(int health) {
+		this.health -= health;
 	}
 	
 	
