@@ -17,6 +17,7 @@ public class World {
 	private static int[][] tiles;
 	private ArrayList<Integer> ids;
 	private int[] idArray;
+	private static int xOffset = 0, yOffset = 0;
 	private String path;
 	private String file;
 	private static EntityManager entityManager;
@@ -95,9 +96,6 @@ public class World {
 	public static EntityManager getEntityManager() {
 		return entityManager;
 	}
-	
-	
-	
-	
+
 	
 }

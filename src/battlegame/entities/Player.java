@@ -12,6 +12,7 @@ public class Player extends Creature{
 	private long lastAttackTimer, attackCooldown = 200, attackTimer = attackCooldown;	
 	public Player(float x, float y){
 		super(x, y, 32, 32, Assets.player);
+		health = 10;
 		walkingSpeed = 180 / 60;
 		jumpSpeed = 5.0F;
 	}
@@ -63,6 +64,7 @@ public class Player extends Creature{
 	@Override
 	public void die() {
 		active = false;
+		System.out.println("You Died!");
 	}
 
 }

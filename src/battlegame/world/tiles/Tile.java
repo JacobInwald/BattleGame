@@ -20,6 +20,7 @@ public class Tile {
 	private int id;
 	protected boolean bouncy = false;
 	protected boolean solid = false;
+	protected boolean turnsGravityOn = true;
 	protected float frictionCoefficient = (float) 100;
 	public float x, y;
 	public Rectangle bounds;
@@ -55,6 +56,8 @@ public class Tile {
 		return solid;
 	}
 	
-	
+	public boolean isTurnsGravityOn() {
+		return turnsGravityOn;
+	}
 	
 }

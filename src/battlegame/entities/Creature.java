@@ -2,6 +2,7 @@ package battlegame.entities;
 
 import java.awt.image.BufferedImage;
 
+import battlegame.world.World;
 import battlegame.world.tiles.Tile;
 import battlegame.world.tiles.TileManager;
 
@@ -10,8 +11,9 @@ public abstract class Creature extends Entity {
 	protected float xSpeed, ySpeed;
 	protected float walkingSpeed = 0, jumpSpeed = 0;
 	protected float weight;
-	protected int health = 10;
-	protected boolean affectedByFriction = true;	protected static final float gPerFrame = 0.1633333333333F;
+	protected boolean affectedByFriction = true;
+	protected boolean isBouncing = false;
+	protected static final float gPerFrame = 0.1633333333333F;
 	protected boolean gravityOn = false;
 	protected Tile[][] tiles;
 	
@@ -21,8 +23,9 @@ public abstract class Creature extends Entity {
 	}
 
 	public void move() {
-		if(gravityOn)
+		if(gravityOn) 
 			ySpeed += gPerFrame;
+			
 		moveX();
 		moveY();
 		
@@ -39,6 +42,12 @@ public abstract class Creature extends Entity {
 		}
 		bounds.x = (int) x;
 		bounds.y = (int) y;
+		if(y >= (World.getHeight() + 1)* Tile.tileHeight) 
+			die();
+		if(x >= (World.getWidth() + 3) * Tile.tileWidth) 
+			die();
+		if(x <= -(3) * Tile.tileWidth) 
+			die();
 		
 	}
 
@@ -51,19 +60,20 @@ public abstract class Creature extends Entity {
 
 	public void moveY() {
 		if(TileManager.isCollidingWithBouncyTile(this)) {
-			if(ySpeed <= 0.1) {
-				ySpeed = 0;
-				gravityOn = false;
-			}
-			ySpeed = (float) -((ySpeed) * 1.1); 
+			gravityOn = true;
+			isBouncing = true;
+			ySpeed = (float) -((ySpeed) * 2);
 		}
 		else if (TileManager.isCollidingInNegY(this)) {
-			ySpeed = -ySpeed;
+			ySpeed = walkingSpeed;
+			isBouncing = false;
 		}
 		else if (TileManager.isCollidingInPosY(this)) {
-			ySpeed = -0.6F;
-			//gravityOn = false;
+			ySpeed = -walkingSpeed;
+			isBouncing = false;
 		}
+		if(!isBouncing)
+			gravityOn = TileManager.returnTileBelow(this);
 	}
 	
 	public float getxSpeed() {

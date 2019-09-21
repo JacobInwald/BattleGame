@@ -22,7 +22,6 @@ public class TileManager {
 			}
 		}
 		setCollisionBounds();
-		//setCoordinates();
 	}
 	
 	public void tickTiles() {
@@ -32,20 +31,6 @@ public class TileManager {
 			}
 		}
 	}
-	
-/*	public void setCoordinates() {
-		for(int x = 0; x < World.getWidth(); x++) {
-			for(int y = 0; y < World.getHeight(); y++) {
-				bounds[x][y].x = x * Tile.tileWidth;
-				bounds[x][y].y = y * Tile.tileHeight;
-				System.out.print(x);
-				System.out.print(' ');
-				System.out.println(y);
-				System.out.println(bounds[0][0].x);
-				
-			}
-		}
-	}*/
 	
 	public void setCollisionBounds() {
 		for(int x = 0; x < World.getWidth(); x++) {
@@ -60,7 +45,6 @@ public class TileManager {
 		for(int x = 0; x < World.getWidth(); x++) {
 			for(int y = 0; y < World.getHeight(); y++) {
 				if (tiles[x][y].isSolid() && e.getBounds().intersects(bounds[x][y])) {
-					//System.out.println(true);
 					return true;
 				}
 			}
@@ -72,17 +56,55 @@ public class TileManager {
 	public static float tileFrictionCoefficient(Entity e) {
 		for(int x = 0; x < World.getWidth(); x++) {
 			for(int y = 0; y < World.getHeight(); y++) {
+				e.getBounds().x = (int)(e.getX() + (e.getWidth() / 2));
 				if (e.getBounds().intersects(bounds[x][y])) {
 					if((y + 1) >= World.getHeight())
-						return 1;
+						return Tile.skyTile.frictionCoefficient;
 					return tiles[x][y + 1].frictionCoefficient;
+				}
+				e.getBounds().x = (int)(e.getX());
+				if (e.getBounds().intersects(bounds[x][y])) {
+					if((y + 1) >= World.getHeight())
+						return Tile.skyTile.frictionCoefficient;
+					return tiles[x + 1][y + 1].frictionCoefficient;
+				}
+				
+			}
+		}
+		return Tile.skyTile.frictionCoefficient;
+	} 
+	/*	
+	public static float tileFrictionCoefficient(Entity e) {
+		for(int x = 0; x < World.getWidth(); x++) {
+			for(int y = 0; y < World.getHeight(); y++) {
+				//The statements (tiles[(int)(e.getX() / Tile.tileWidth)][(int)(e.getY() / Tile.tileHeight) + 1].solid) and 
+				// (tiles[(int)(e.getX() / Tile.tileWidth) + 1][(int)(e.getY() / Tile.tileHeight) + 1].solid) checks whether the tiles
+				// to the left of the player is solid
+				// The statement (tiles[(int)((e.getX() + e.getWidth()) / Tile.tileWidth)][(int)(e.getY() / Tile.tileHeight) + 1].solid) checks
+				// whether the tiles to the right of the player are solid
+
+				if ((e.getY() + Tile.tileHeight)  >= World.getHeight() * Tile.tileHeight) {
+					return Tile.skyTile.frictionCoefficient;
+				}
+				if (e.getBounds().intersects(bounds[x][y]) &&
+					(tiles[(int)(e.getX() / Tile.tileWidth)][(int)(e.getY() / Tile.tileHeight) + 1].solid) &&
+					!(tiles[(int)((e.getX() + e.getWidth()) / Tile.tileWidth)][(int)(e.getY() / Tile.tileHeight) + 1].solid)) {
+						return tiles[x][y + 1].frictionCoefficient;
+				}
+				else if (e.getBounds().intersects(bounds[x][y]) && 
+					!(tiles[(int)((e.getX() + e.getWidth()) / Tile.tileWidth)][(int)(e.getY() / Tile.tileHeight) + 1].solid) &&
+					(tiles[(int)(e.getX() / Tile.tileWidth) + 1][(int)(e.getY() / Tile.tileHeight) + 1].solid) ) {
+						return tiles[x + 1][y + 1].frictionCoefficient;
+				}
+				else if(e.getBounds().intersects(bounds[x][y]) && 
+						(tiles[(int)((e.getX() + e.getWidth()) / Tile.tileWidth)][(int)(e.getY() / Tile.tileHeight) + 1].solid) &&
+						(tiles[(int)(e.getX() / Tile.tileWidth) + 1][(int)(e.getY() / Tile.tileHeight) + 1].solid) ) {
+					return Tile.skyTile.frictionCoefficient;
 				}
 			}
 		}
-		return 1;
-		
-	}
-	
+		return Tile.skyTile.frictionCoefficient;
+	} */
 	public static boolean isCollidingInPosX(Entity e) {
 		for(int x = 0; x < World.getWidth(); x++) {
 			for(int y = 0; y < World.getHeight(); y++) {
@@ -110,8 +132,8 @@ public class TileManager {
 	public static boolean isCollidingInPosY(Entity e) {
 		for(int x = 0; x < World.getWidth(); x++) {
 			for(int y = 0; y < World.getHeight(); y++) {
-				if (tiles[x][y].isSolid() && e.getBounds().intersects(bounds[x][y]) && ((Creature) e).getySpeed() > 0
-					&& e.getY() + (e.getHeight() / 2) < bounds[x][y].getY()) { 
+				if (tiles[x][y].isSolid() && e.getBounds().intersects(bounds[x][y])
+					&& e.getY() + (e.getHeight() / 2) < bounds[x][y].getY() - 1) { 
 					return true;
 				}
 			}
@@ -122,8 +144,8 @@ public class TileManager {
 	public static boolean isCollidingInNegY(Entity e) {
 		for(int x = 0; x < World.getWidth(); x++) {
 			for(int y = 0; y < World.getHeight(); y++) {
-				if (tiles[x][y].isSolid() && e.getBounds().intersects(bounds[x][y]) && ((Creature) e).getySpeed() < 0
-					&& bounds[x][y].getY() + (bounds[x][y].getHeight() / 2) < e.getY()) { 
+				if (tiles[x][y].isSolid() && e.getBounds().intersects(bounds[x][y])
+					&& bounds[x][y].getY() + (bounds[x][y].getHeight() / 2) < e.getY() + 1) { 
 					return true;
 				}
 			}
@@ -131,15 +153,48 @@ public class TileManager {
 		return false;
 	}
 	
+	
 	public static boolean isCollidingWithBouncyTile(Entity e) {
 		for(int x = 0; x < World.getWidth(); x++) {
 			for(int y = 0; y < World.getHeight(); y++) {
-				if (tiles[x][y].isSolid() && e.getBounds().intersects(bounds[x][y]) && ((Creature) e).getySpeed() > 0
-					&& e.getY() + (e.getHeight() / 2) < bounds[x][y].getY() && tiles[x][y].bouncy) { 
+				if (e.getBounds().intersects(bounds[x][y]) && tiles[x][y].bouncy) { 
 					return true;
 				}
 			}
 		}
 		return false;
 	}	
+	
+	public static boolean returnTileBelow(Entity e) {
+		for(int x = 0; x < World.getWidth(); x++) {
+			for(int y = 0; y < World.getHeight(); y++) {
+				//The statements (tiles[(int)(e.getX() / Tile.tileWidth)][(int)(e.getY() / Tile.tileHeight) + 1].solid) and 
+				// (tiles[(int)(e.getX() / Tile.tileWidth) + 1][(int)(e.getY() / Tile.tileHeight) + 1].solid) checks whether the tiles
+				// to the left of the player is solid
+				// The statement (tiles[(int)((e.getX() + e.getWidth()) / Tile.tileWidth)][(int)(e.getY() / Tile.tileHeight) + 1].solid) checks
+				// whether the tiles to the right of the player are solid
+
+				if ((e.getY() + Tile.tileHeight)  >= World.getHeight() * Tile.tileHeight) {
+					System.out.println(true);
+					return true;
+				}
+				if (e.getBounds().intersects(bounds[x][y]) &&
+					(tiles[(int)(e.getX() / Tile.tileWidth)][(int)(e.getY() / Tile.tileHeight) + 1].solid) &&
+					!(tiles[(int)((e.getX() + e.getWidth()) / Tile.tileWidth)][(int)(e.getY() / Tile.tileHeight) + 1].solid)) {
+						return tiles[x][y + 1].isTurnsGravityOn();
+				}
+				else if (e.getBounds().intersects(bounds[x][y]) && 
+					!(tiles[(int)((e.getX() + e.getWidth()) / Tile.tileWidth)][(int)(e.getY() / Tile.tileHeight) + 1].solid) &&
+					(tiles[(int)(e.getX() / Tile.tileWidth) + 1][(int)(e.getY() / Tile.tileHeight) + 1].solid) ) {
+						return tiles[x + 1][y + 1].isTurnsGravityOn();
+				}
+				else if(e.getBounds().intersects(bounds[x][y]) && 
+						(tiles[(int)((e.getX() + e.getWidth()) / Tile.tileWidth)][(int)(e.getY() / Tile.tileHeight) + 1].solid) &&
+						(tiles[(int)(e.getX() / Tile.tileWidth) + 1][(int)(e.getY() / Tile.tileHeight) + 1].solid) ) {
+					return false;
+				}
+			}
+		}
+		return true;
+	} 
 }
