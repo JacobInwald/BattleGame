@@ -1,6 +1,7 @@
 package battlegame.entities;
 
 import java.awt.Graphics;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 
 import battlegame.Main;
@@ -14,7 +15,7 @@ public class Player extends Creature{
 		super(x, y, 32, 32, Assets.player);
 		health = 10;
 		walkingSpeed = 180 / 60;
-		jumpSpeed = 5.0F;
+		jumpSpeed = -6.0F;
 	}
 
 	@Override
@@ -36,8 +37,8 @@ public class Player extends Creature{
 		if(Main.getGame().getKeyController().down) {
 				return;
 			}
-		if(Main.getGame().getKeyController().up) {
-			ySpeed = -jumpSpeed;
+		if(Main.getGame().getKeyController().keyJustPressed(KeyEvent.VK_W)) {
+			isJumping = true;
 			gravityOn = true;
 		}
 		if(Main.getGame().getKeyController().right) {

@@ -73,38 +73,7 @@ public class TileManager {
 		}
 		return Tile.skyTile.frictionCoefficient;
 	} 
-	/*	
-	public static float tileFrictionCoefficient(Entity e) {
-		for(int x = 0; x < World.getWidth(); x++) {
-			for(int y = 0; y < World.getHeight(); y++) {
-				//The statements (tiles[(int)(e.getX() / Tile.tileWidth)][(int)(e.getY() / Tile.tileHeight) + 1].solid) and 
-				// (tiles[(int)(e.getX() / Tile.tileWidth) + 1][(int)(e.getY() / Tile.tileHeight) + 1].solid) checks whether the tiles
-				// to the left of the player is solid
-				// The statement (tiles[(int)((e.getX() + e.getWidth()) / Tile.tileWidth)][(int)(e.getY() / Tile.tileHeight) + 1].solid) checks
-				// whether the tiles to the right of the player are solid
-
-				if ((e.getY() + Tile.tileHeight)  >= World.getHeight() * Tile.tileHeight) {
-					return Tile.skyTile.frictionCoefficient;
-				}
-				if (e.getBounds().intersects(bounds[x][y]) &&
-					(tiles[(int)(e.getX() / Tile.tileWidth)][(int)(e.getY() / Tile.tileHeight) + 1].solid) &&
-					!(tiles[(int)((e.getX() + e.getWidth()) / Tile.tileWidth)][(int)(e.getY() / Tile.tileHeight) + 1].solid)) {
-						return tiles[x][y + 1].frictionCoefficient;
-				}
-				else if (e.getBounds().intersects(bounds[x][y]) && 
-					!(tiles[(int)((e.getX() + e.getWidth()) / Tile.tileWidth)][(int)(e.getY() / Tile.tileHeight) + 1].solid) &&
-					(tiles[(int)(e.getX() / Tile.tileWidth) + 1][(int)(e.getY() / Tile.tileHeight) + 1].solid) ) {
-						return tiles[x + 1][y + 1].frictionCoefficient;
-				}
-				else if(e.getBounds().intersects(bounds[x][y]) && 
-						(tiles[(int)((e.getX() + e.getWidth()) / Tile.tileWidth)][(int)(e.getY() / Tile.tileHeight) + 1].solid) &&
-						(tiles[(int)(e.getX() / Tile.tileWidth) + 1][(int)(e.getY() / Tile.tileHeight) + 1].solid) ) {
-					return Tile.skyTile.frictionCoefficient;
-				}
-			}
-		}
-		return Tile.skyTile.frictionCoefficient;
-	} */
+	
 	public static boolean isCollidingInPosX(Entity e) {
 		for(int x = 0; x < World.getWidth(); x++) {
 			for(int y = 0; y < World.getHeight(); y++) {

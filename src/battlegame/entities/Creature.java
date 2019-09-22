@@ -11,8 +11,9 @@ public abstract class Creature extends Entity {
 	protected float xSpeed, ySpeed;
 	protected float walkingSpeed = 0, jumpSpeed = 0;
 	protected float weight;
-	protected boolean affectedByFriction = true;
+	protected boolean affectedByFriction = true, isJumping = false;
 	protected boolean isBouncing = false;
+	protected int numberOfJumps = 3, jumpsDone = 0;
 	protected static final float gPerFrame = 0.1633333333333F;
 	protected boolean gravityOn = false;
 	protected Tile[][] tiles;
@@ -25,10 +26,11 @@ public abstract class Creature extends Entity {
 	public void move() {
 		if(gravityOn) 
 			ySpeed += gPerFrame;
-			
+		
+		jump();
 		moveX();
 		moveY();
-		
+		isJumping = false;
 		x += xSpeed;
 		y += ySpeed;
 
@@ -38,7 +40,7 @@ public abstract class Creature extends Entity {
 			xSpeed = 0;
 		if(affectedByFriction) {
 			xSpeed = (float) (xSpeed / TileManager.tileFrictionCoefficient(this));
-			ySpeed = (float) (ySpeed / (1 + (gPerFrame / 10)));
+			ySpeed = (float) (ySpeed / (1 + (gPerFrame / 50)));
 		}
 		bounds.x = (int) x;
 		bounds.y = (int) y;
@@ -62,18 +64,28 @@ public abstract class Creature extends Entity {
 		if(TileManager.isCollidingWithBouncyTile(this)) {
 			gravityOn = true;
 			isBouncing = true;
-			ySpeed = (float) -((ySpeed) * 2);
+			ySpeed = (float) -((ySpeed) * 0.5);
+			jumpsDone = 0;
 		}
 		else if (TileManager.isCollidingInNegY(this)) {
 			ySpeed = walkingSpeed;
 			isBouncing = false;
 		}
 		else if (TileManager.isCollidingInPosY(this)) {
+			System.out.println("Youch");
 			ySpeed = -walkingSpeed;
 			isBouncing = false;
+			jumpsDone = 0;
 		}
 		if(!isBouncing)
 			gravityOn = TileManager.returnTileBelow(this);
+	}
+	
+	public void jump() {
+		if(jumpsDone <= numberOfJumps && isJumping) {
+			ySpeed = jumpSpeed;
+			jumpsDone += 1;
+		}
 	}
 	
 	public float getxSpeed() {
