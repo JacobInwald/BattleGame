@@ -26,11 +26,8 @@ public abstract class Creature extends Entity {
 	public void move() {
 		if(gravityOn) 
 			ySpeed += gPerFrame;
-		
-		jump();
 		moveX();
 		moveY();
-		isJumping = false;
 		x += xSpeed;
 		y += ySpeed;
 
@@ -61,28 +58,32 @@ public abstract class Creature extends Entity {
 	}
 
 	public void moveY() {
-		if(TileManager.isCollidingWithBouncyTile(this)) {
-			gravityOn = true;
-			isBouncing = true;
-			ySpeed = (float) -((ySpeed) * 0.5);
-			jumpsDone = 0;
-		}
-		else if (TileManager.isCollidingInNegY(this)) {
+		if (TileManager.isCollidingInNegY(this)) {
 			ySpeed = walkingSpeed;
 			isBouncing = false;
 		}
+		else if(TileManager.isCollidingWithBouncyTile(this)) {
+			gravityOn = true;
+			isBouncing = true;
+			jumpsDone = 0;
+			ySpeed = (float) (jumpSpeed * 1.5);
+
+		}
 		else if (TileManager.isCollidingInPosY(this)) {
-			System.out.println("Youch");
 			ySpeed = -walkingSpeed;
 			isBouncing = false;
 			jumpsDone = 0;
 		}
 		if(!isBouncing)
 			gravityOn = TileManager.returnTileBelow(this);
+		else {
+			gravityOn = true;
+		}
 	}
 	
 	public void jump() {
-		if(jumpsDone <= numberOfJumps && isJumping) {
+		if(jumpsDone <= numberOfJumps) {
+			isBouncing = true;
 			ySpeed = jumpSpeed;
 			jumpsDone += 1;
 		}

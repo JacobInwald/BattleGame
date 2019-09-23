@@ -38,8 +38,7 @@ public class Player extends Creature{
 				return;
 			}
 		if(Main.getGame().getKeyController().keyJustPressed(KeyEvent.VK_W)) {
-			isJumping = true;
-			gravityOn = true;
+			jump();
 		}
 		if(Main.getGame().getKeyController().right) {
 			xSpeed = walkingSpeed;
