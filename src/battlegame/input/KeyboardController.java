@@ -6,7 +6,7 @@ import java.awt.event.KeyListener;
 public class KeyboardController implements KeyListener{
 
 	private boolean[] keys, justPressed, cantPress;
-	public boolean up, down, left, right, p, o;
+	public boolean up, down, left, right, p, o, downAlt, rightAlt, leftAlt, z, x;
 	public int lastDirectionPress;
 	
 	public KeyboardController() {
@@ -31,10 +31,15 @@ public class KeyboardController implements KeyListener{
 		
 		up = keys[KeyEvent.VK_W];
 		down = keys[KeyEvent.VK_S];
+		downAlt = keys[KeyEvent.VK_DOWN];
 		left = keys[KeyEvent.VK_A];
+		leftAlt = keys[KeyEvent.VK_LEFT];
 		right = keys[KeyEvent.VK_D];
+		rightAlt = keys[KeyEvent.VK_RIGHT];
 		p = keys[KeyEvent.VK_P];
+		x = keys[KeyEvent.VK_X];
 		o = keys[KeyEvent.VK_O];
+		z = keys[KeyEvent.VK_Z];
 		}
 	
 	public boolean keyJustPressed(int keyCode){

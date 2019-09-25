@@ -2,13 +2,13 @@ package battlegame.world.tiles;
 
 import java.awt.image.BufferedImage;
 
-public class TopDirtTile extends Tile {
+public class BrickTile extends Tile {
 
-	public TopDirtTile(BufferedImage texture, int id) {
+	public BrickTile(BufferedImage texture, int id) {
 		super(texture, id);
 		this.solid = true;
 		this.turnsGravityOn = false;
-		wallSlideCoefficient = 1.1F;
+		this.wallSlideCoefficient = 1.1F;
 	}
 
 }

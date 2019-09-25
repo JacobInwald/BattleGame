@@ -12,10 +12,14 @@ public class Player extends Creature{
 	
 	private long lastAttackTimer, attackCooldown = 200, attackTimer = attackCooldown;	
 	public Player(float x, float y){
-		super(x, y, 32, 32, Assets.player);
+		super(x, y, 32, 45, Assets.player);
 		health = 10;
-		walkingSpeed = 180 / 60;
+		walkingSpeed = 3;
 		jumpSpeed = -6.0F;
+		bounds.x = (int) x;
+		bounds.y = (int) (y - bounds.height);
+		bounds.height = 30;
+		bounds.width = 30;
 	}
 
 	@Override
@@ -23,28 +27,32 @@ public class Player extends Creature{
 		if(health <= 0)
 			die();
 		getInput();
-		attack();
+		//attack();
 		move();
 	}
 
 	@Override
 	public void render(Graphics g) {
-		//g.drawImage(texture, (int)x, (int)y, width, height, null);
-		g.fillRect((int)x, (int)y, width, height);
+		g.drawImage(texture, (int)x, (int)y, width, height, null);
+		g.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
 	}
 	
 	public void getInput() {
-		if(Main.getGame().getKeyController().down) {
+		if(Main.getGame().getKeyController().down || Main.getGame().getKeyController().downAlt) {
 				return;
 			}
-		if(Main.getGame().getKeyController().keyJustPressed(KeyEvent.VK_W)) {
+		if(Main.getGame().getKeyController().keyJustPressed(KeyEvent.VK_W) 
+			|| Main.getGame().getKeyController().keyJustPressed(KeyEvent.VK_UP)) {
 			jump();
 		}
-		if(Main.getGame().getKeyController().right) {
+		if(Main.getGame().getKeyController().right || Main.getGame().getKeyController().rightAlt) {// && ableToMoveX) {
 			xSpeed = walkingSpeed;
 		}
-		if(Main.getGame().getKeyController().left) {
+		if(Main.getGame().getKeyController().left || Main.getGame().getKeyController().leftAlt) {// && ableToMoveX) {
 			xSpeed = -walkingSpeed;
+		}
+		if(Main.getGame().getKeyController().o || Main.getGame().getKeyController().z) {
+			attack();
 		}
 	}
 	
@@ -53,10 +61,7 @@ public class Player extends Creature{
 		lastAttackTimer = System.currentTimeMillis();
 		if(attackTimer <  attackCooldown)
 			return;
-		
-		if(Main.getGame().getKeyController().o) {
-			World.getEntityManager().getAddEntityList().add(new Bullet(this.x + this.width + 1, this.y - 1, this));
-		}
+		World.getEntityManager().getAddEntityList().add(new Bullet(this.x + this.width + 1, this.y - 1, this));
 		
 		attackTimer = 0;
 	}

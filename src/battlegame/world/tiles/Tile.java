@@ -10,10 +10,10 @@ public class Tile {
 	
 	public static Tile[] tiles = new Tile[256];
 	public static Tile skyTile = new SkyTile(Assets.skyTile, 0);
-	public static Tile topDirtTile = new TopDirtTile(Assets.topDirtTile, 1);
-	public static Tile bouncyTile = new BouncyTile(Assets.player, 2);
+	public static Tile brickTile = new BrickTile(Assets.brickTile, 1);
+	public static Tile bouncyTile = new BouncyTile(Assets.bouncyTile, 2);
 	public static Tile iceTile = new IceTile(Assets.player, 3);
-	
+
 	public static int tileHeight = 32, tileWidth = 32;
 	
 	private BufferedImage texture;
@@ -22,6 +22,7 @@ public class Tile {
 	protected boolean solid = false;
 	protected boolean turnsGravityOn = true;
 	protected float frictionCoefficient = (float) 100;
+	protected float wallSlideCoefficient = 1.02F;
 	public float x, y;
 	public Rectangle bounds;
 	

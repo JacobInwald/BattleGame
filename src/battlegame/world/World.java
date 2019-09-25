@@ -4,9 +4,10 @@ import java.awt.Graphics;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import battlegame.entities.Bullet;
+import battlegame.background.Background;
 import battlegame.entities.Player;
 import battlegame.entities.entitymanager.EntityManager;
+import battlegame.graphics.Assets;
 import battlegame.utility.Utilities;
 import battlegame.world.tiles.Tile;
 import battlegame.world.tiles.TileManager;
@@ -17,7 +18,7 @@ public class World {
 	private static int[][] tiles;
 	private ArrayList<Integer> ids;
 	private int[] idArray;
-	private static int xOffset = 0, yOffset = 0;
+	private Background bg;
 	private String path;
 	private String file;
 	private static EntityManager entityManager;
@@ -29,7 +30,9 @@ public class World {
 		ids = new ArrayList<Integer>();
 		entityManager = new EntityManager();
 		tileManager = new TileManager();
-		player = new Player(100, 300);
+		player = new Player(300, 200);
+		bg = new Background(Assets.background, width * Tile.tileWidth, height * Tile.tileHeight);
+		
 	}
 
 	public void init() throws IOException {
@@ -44,6 +47,7 @@ public class World {
 	}	
 	
 	public void render(Graphics g) {
+		bg.render(g);
 		for(int x = 0; x < width; x ++) {
 			for(int y = 0; y < height; y++) {
 				g.drawImage(getTile(x, y).getTexture(), x * Tile.tileWidth, y * Tile.tileHeight, Tile.tileWidth, Tile.tileHeight, null);
@@ -78,6 +82,8 @@ public class World {
 				tiles[x][y] = idArray[(x + y * width) + 2];
 			}
 		}
+		bg.setWidth(width * Tile.tileWidth);
+		bg.setHeight(height * Tile.tileHeight);
 
 	}
 

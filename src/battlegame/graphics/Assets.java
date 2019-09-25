@@ -11,18 +11,24 @@ public class Assets {
 	
 	
 	public static BufferedImage player;
-	public static BufferedImage skyTile, topDirtTile;
-	public static SpriteSheet sprites, tiles;
+	public static BufferedImage background;
+	public static BufferedImage skyTile, topDirtTile, brickTile, bouncyTile;
+	public static SpriteSheet sprites, tiles, background1;
 	
 	public static void init() {
-		sprites = new SpriteSheet("/textures/Sprites.png");
-		tiles = new SpriteSheet("/textures/Tiles.png");
+		sprites = new SpriteSheet("/textures/ArthurSpritesSheet.png");
+		tiles = new SpriteSheet("/textures/TilesSheet.png");
+		background1 = new SpriteSheet("/textures/testBackground.png"); 
 		
 		
-		player = sprites.cropSheet(0, 0, width, height);
 		
-		skyTile = tiles.cropSheet(0, 0, tileWidth, tileHeight);
-		topDirtTile = tiles.cropSheet(tileWidth, 0, tileWidth, tileHeight);
+		player = sprites.cropSheet(0, 0, 32, 45);
+		
+		brickTile = tiles.cropSheet(0, 0, tileWidth, tileHeight);
+		skyTile = tiles.cropSheet(tileWidth, 0, tileWidth, tileHeight);
+		bouncyTile = tiles.cropSheet(tileWidth * 2, 0, tileWidth, tileHeight);
+		
+		background = background1.getSheet();
 	}
 	
 
