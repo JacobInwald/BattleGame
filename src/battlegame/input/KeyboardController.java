@@ -13,9 +13,10 @@ public class KeyboardController implements KeyListener{
 		keys = new boolean[256];
 		cantPress = new boolean[keys.length];
 		justPressed = new boolean[keys.length];
-		lastDirectionPress = KeyEvent.VK_DOWN;	}
+		lastDirectionPress = KeyEvent.VK_D;	}
 
 	public void tick() {
+		
 		for(int i = 0; i < keys.length; i++) {
 			if(cantPress[i] && !keys[i]) {
 				cantPress[i] = false;

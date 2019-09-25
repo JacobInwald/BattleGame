@@ -12,14 +12,15 @@ public class Bullet extends Creature{
 	protected int damage = 4;
 	protected Entity firer;
 	
-	public Bullet(float x, float y, Entity firer) {
+	public Bullet(float x, float y, int direction, Entity firer) {
 		super(x, y, 16, 16, Assets.player);
 		if(!(firer == null))
 			this.firer = firer;
 		else
 			bulletSpeed = 0;
-		affectedByFriction = false;
-		gravityOn = false;
+		if(direction <= 0)
+			this.bulletSpeed = -bulletSpeed;
+		affectedByPhysics = false;
 	}
 
 	@Override
