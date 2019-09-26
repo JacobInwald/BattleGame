@@ -152,8 +152,7 @@ public abstract class Creature extends Entity {
 				ableToWallSlide = TileManager.ableToWallSlide(this);  
 				moveX();
 				moveY(); 
-				if(ableToWallSlide && ySpeed <= 0)
-					ySpeed += 0.1;
+				System.out.println(ableToWallSlide);
 				if(ableToWallSlide) 
 					ySpeed += 0.05; 
 				if(gravityOn && !ableToWallSlide && affectedByPhysics) 
@@ -164,12 +163,13 @@ public abstract class Creature extends Entity {
 
 				if(!gravityOn) 
 					ySpeed = 0;
+				
 				if(affectedByPhysics) { 
 					xSpeed = (float) (xSpeed / TileManager.tileFrictionCoefficient(this));
 					//ySpeed = (float) (ySpeed /TileManager.tileFrictionCoefficient(this));
 					ySpeed = (float) (ySpeed / (1 + gPerFrame / 10)); 
 				}
-				bounds.x = (int) x;
+				bounds.x = (int) (x + (width - bounds.width) / 2);
 				bounds.y = (int) (y + (height - bounds.height));
 
 				if(y >= (World.getHeight() + 1)* Tile.tileHeight)
@@ -196,24 +196,18 @@ public abstract class Creature extends Entity {
 			}
 
 			public void moveY() {
-				if (TileManager.isCollidingInPosY(this) && !ableToWallSlide) { 
+				if (TileManager.isCollidingInPosY(this) && !TileManager.isCollidingInNegY(this)) { 
+					if(ableToWallSlide) 
+						return;
 					ySpeed  = -walkingSpeed;
 					isBouncing = false;
 					jumpsDone = 0; 
 				}
-				if (TileManager.isCollidingInNegY(this)) { 
-					/*if(TileManager.isCollidingInNegX(this) && xSpeed == 0) {
+				if (TileManager.isCollidingInNegY(this) && !TileManager.isCollidingInPosY(this)) { 
+					if(ableToWallSlide) 
 						return;
-					}
-					else if(TileManager.isCollidingInPosX(this) && xSpeed == 0)
-						return;*/
-					if(ableToWallSlide && xSpeed == 0) {
-						ySpeed += 0.1;
-						xSpeed = 0;
-						return;
-					}
-					ySpeed = walkingSpeed; 
-					isBouncing = false; 
+					ySpeed = walkingSpeed;
+					isBouncing = false;
 				} 
 				else if(TileManager.isCollidingWithBouncyTile(this)) {
 					gravityOn = true;

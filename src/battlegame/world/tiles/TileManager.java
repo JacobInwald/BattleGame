@@ -91,7 +91,7 @@ public class TileManager {
 			for(int y = 0; y < World.getHeight(); y++) {
 				if (tiles[x][y].isSolid() && e.getBounds().intersects(bounds[x][y])
 					&& (bounds[x][y].getX() + (bounds[x][y].getWidth() / 2) < e.getBounds().x) 
-					&& (e.getBounds().y + e.getBounds().height) >= bounds[x][y].y + 5) { 
+					&& (e.getBounds().y + e.getBounds().height) >= bounds[x][y].y + 5 ) { 
 					return true;
 				}
 			}
@@ -121,6 +121,7 @@ public class TileManager {
 			}
 		}
 		return false;
+		
 	}
 	
 	
@@ -136,38 +137,41 @@ public class TileManager {
 	}	
 	
 	public static float tileFrictionCoefficient(Entity e) {
-		if((int)(e.getBounds().getX() / Tile.tileWidth) + 1 >= World.getWidth()|| 
-				(int)(e.getBounds().getX() / Tile.tileWidth) <= 0|| 
-				(int)((e.getBounds().getY() + e.getBounds().height)/ Tile.tileHeight) >= World.getHeight()) 
+		if((int)((e.getBounds().getX() + e.getBounds().width)/ Tile.tileWidth) >= World.getWidth()|| 
+				(int)(e.getBounds().getX() / Tile.tileWidth) <= 0 || 
+				(int) ((e.getBounds().y + (e.getBounds().height)) / Tile.tileHeight) >= World.getHeight() ||
+				(int) ((e.getBounds().y) / Tile.tileHeight) <= 0) 
 			return Tile.skyTile.frictionCoefficient;
 		
 		if ((tiles[(int) (e.getBounds().x / Tile.tileWidth)][(int) ((e.getBounds().y + (e.getBounds().height)) / Tile.tileHeight)].solid)
-				&& !(tiles[(int) ((e.getBounds().x) / Tile.tileWidth) + 1][(int) ((e.getBounds().y + (e.getBounds().height)) / Tile.tileHeight)].solid)) {
-			return tiles[(int) (e.getBounds().x / Tile.tileWidth) + 1][(int) ((e.getBounds().y + (e.getBounds().height)) / Tile.tileHeight)].frictionCoefficient;
+				&& !(tiles[(int)((e.getBounds().getX() + e.getBounds().width)/ Tile.tileWidth)][(int) ((e.getBounds().y + (e.getBounds().height)) / Tile.tileHeight)].solid)) {
+			return tiles[(int)((e.getBounds().getX() + e.getBounds().width)/ Tile.tileWidth)][(int) ((e.getBounds().y + (e.getBounds().height)) / Tile.tileHeight)].frictionCoefficient;
 		} 
 		else if (!(tiles[(int) ((e.getBounds().x) / Tile.tileWidth)][(int) ((e.getBounds().y + (e.getBounds().height)) / Tile.tileHeight)].solid)
-				&& (tiles[(int) (e.getBounds().x / Tile.tileWidth)+ 1][(int) ((e.getBounds().y + (e.getBounds().height)) / Tile.tileHeight)].solid)) {
+				&& (tiles[(int)((e.getBounds().getX() + e.getBounds().width)/ Tile.tileWidth)][(int) ((e.getBounds().y + (e.getBounds().height)) / Tile.tileHeight)].solid)) {
 			return tiles[(int) (e.getBounds().x / Tile.tileWidth)][(int) ((e.getBounds().y + (e.getBounds().height)) / Tile.tileHeight)].frictionCoefficient;
 		} 
 		else if ((tiles[(int) ((e.getBounds().x) / Tile.tileWidth)][(int) ((e.getBounds().y + (e.getBounds().height)) / Tile.tileHeight)].solid)
-				&& (tiles[(int) (e.getBounds().x / Tile.tileWidth) + 1][(int) ((e.getBounds().y + (e.getBounds().height)) / Tile.tileHeight)].solid)) {
-			return tiles[(int) (e.getBounds().x / Tile.tileWidth) + 1][(int) ((e.getBounds().y + (e.getBounds().height)) / Tile.tileHeight)].frictionCoefficient;
+				&& (tiles[(int)((e.getBounds().getX() + e.getBounds().width)/ Tile.tileWidth)][(int) ((e.getBounds().y + (e.getBounds().height)) / Tile.tileHeight)].solid)) {
+			return tiles[(int)((e.getBounds().getX() + e.getBounds().width)/ Tile.tileWidth)][(int) ((e.getBounds().y + (e.getBounds().height)) / Tile.tileHeight)].frictionCoefficient;
 		}
 		return Tile.skyTile.frictionCoefficient;
 	} 
 	
 	public static boolean ableToWallSlide(Entity e) {
 		// This stops there being an array out of bounds exception when using the 2d array
-		if((int)(e.getBounds().getX() / Tile.tileWidth) + 1 >= World.getWidth()|| 
-			(int)(e.getBounds().getX() / Tile.tileWidth) <= 0|| 
-			(int)(e.getBounds().getY() / Tile.tileHeight) + 1 >= World.getHeight()) 
+		if((int)((e.getBounds().getX() + e.getBounds().width)/ Tile.tileWidth) >= World.getWidth()|| 
+			(int)(e.getBounds().getX() / Tile.tileWidth) <= 0 || 
+			(int) ((e.getBounds().y + (e.getBounds().height)) / Tile.tileHeight) >= World.getHeight() ||
+			(int) ((e.getBounds().y) / Tile.tileHeight) <= 0) 
 			return false;
 		// This checks the tiles to the left, underneath and on the entity to check whether 
 		// they are solid, not solid and not solid respectively. This is to ensure that the
 		// entity is actually allowed to wall slide
-		if (tiles[(int)(e.getBounds().getX() / Tile.tileWidth)][(int)(e.getBounds().getY() / Tile.tileHeight)].isSolid() 
-				&& !tiles[(int)(e.getBounds().getX() / Tile.tileWidth) + 1][(int)(e.getBounds().getY() / Tile.tileHeight)].isSolid()
-				&& !tiles[(int)(e.getBounds().getX() / Tile.tileWidth) + 1][(int)(e.getBounds().getY() / Tile.tileHeight) + 1].isSolid()
+		if ((tiles[(int)(e.getBounds().getX() / Tile.tileWidth)][(int) ((e.getBounds().y + (e.getBounds().height)) / Tile.tileHeight)].isSolid() 
+				|| tiles[(int)(e.getBounds().getX() / Tile.tileWidth)][(int) ((e.getBounds().y + (e.getBounds().height)) / Tile.tileHeight)].isSolid()) 
+				&& !tiles[(int)((e.getBounds().getX() + e.getBounds().width)/ Tile.tileWidth)][(int) ((e.getBounds().y + (e.getBounds().height)) / Tile.tileHeight)].isSolid()
+				&& !tiles[(int)((e.getBounds().getX() + e.getBounds().width)/ Tile.tileWidth)][(int) ((e.getBounds().y + (e.getBounds().height)) / Tile.tileHeight) - 1].isSolid()
 				&& TileManager.isCollidingInNegX(e)) {
 			((Creature) (e)).lastAttackDirectionPressed = KeyEvent.VK_D;
 			return true;
@@ -175,9 +179,10 @@ public class TileManager {
 		// This checks the tiles to the right, underneath and on the entity to check whether 
 		// they are solid, not solid and not solid respectively. This is to ensure that the
 		// entity is actually allowed to wall slide
-		if (tiles[(int)(e.getBounds().getX() / Tile.tileWidth) + 1][(int)(e.getBounds().getY() / Tile.tileHeight)].isSolid() 
-				&& !tiles[(int)(e.getBounds().getX() / Tile.tileWidth)][(int)(e.getBounds().getY() / Tile.tileHeight)].isSolid()
-				&& !tiles[(int)(e.getBounds().getX() / Tile.tileWidth)][(int)(e.getBounds().getY() / Tile.tileHeight) + 1].isSolid()
+		if ((tiles[(int)((e.getBounds().getX() + e.getBounds().width)/ Tile.tileWidth)][(int) ((e.getBounds().y + (e.getBounds().height)) / Tile.tileHeight)].isSolid()
+				|| tiles[(int)((e.getBounds().getX() + e.getBounds().width)/ Tile.tileWidth)][(int) ((e.getBounds().y + (e.getBounds().height)) / Tile.tileHeight) - 1].isSolid()) 
+				&& !tiles[(int)(e.getBounds().getX() / Tile.tileWidth)][(int) ((e.getBounds().y + (e.getBounds().height)) / Tile.tileHeight)].isSolid()
+				&& !tiles[(int)(e.getBounds().getX() / Tile.tileWidth)][(int) ((e.getBounds().y + (e.getBounds().height)) / Tile.tileHeight) - 1].isSolid()
 				&& TileManager.isCollidingInPosX(e)) {
 			((Creature) (e)).lastAttackDirectionPressed = KeyEvent.VK_A;
 			return true;
@@ -196,26 +201,24 @@ public class TileManager {
 		// Tile.tileWidth)][(int)(e.getBounds().y / Tile.tileHeight) + 1].solid) checks
 		// whether the tiles to the right of the player are solid
 
-		if ((e.getBounds().y + e.getBounds().height) >= World.getHeight() * Tile.tileHeight
-				|| e.getBounds().x + Tile.tileWidth >= World.getWidth() * Tile.tileWidth) {
+		if((int)((e.getBounds().getX() + e.getBounds().width)/ Tile.tileWidth) >= World.getWidth()|| 
+				(int)(e.getBounds().getX() / Tile.tileWidth) <= 0 || 
+				(int) ((e.getBounds().y + (e.getBounds().height)) / Tile.tileHeight) >= World.getHeight() ||
+				(int) ((e.getBounds().y) / Tile.tileHeight) <= 0) 
 			return true;
+		
+		if ((tiles[(int) (e.getBounds().x / Tile.tileWidth)][(int) ((e.getBounds().y + (e.getBounds().height)) / Tile.tileHeight)].solid) 
+			&& !(tiles[(int) (int)((e.getBounds().getX() + e.getBounds().width)/ Tile.tileWidth)][(int) ((e.getBounds().y + (e.getBounds().height)) / Tile.tileHeight)].solid)) {
+			return tiles[(int) (e.getBounds().x / Tile.tileWidth)][(int) ((e.getBounds().y + (e.getBounds().height)) / Tile.tileHeight)].turnsGravityOn;
 		}
-		if ((tiles[(int) (e.getBounds().x / Tile.tileWidth)][(int) ((e.getBounds().y + (e.getBounds().height))
-				/ Tile.tileHeight)].solid)
-				&& !(tiles[(int) ((e.getBounds().x) / Tile.tileWidth)
-						+ 1][(int) ((e.getBounds().y + (e.getBounds().height)) / Tile.tileHeight)].solid)) {
-			return tiles[(int) (e.getBounds().x / Tile.tileWidth)][(int) ((e.getBounds().y + (e.getBounds().height))
-					/ Tile.tileHeight)].turnsGravityOn;
-		} else if (!(tiles[(int) ((e.getBounds().x) / Tile.tileWidth)][(int) ((e.getBounds().y + (e.getBounds().height))
-				/ Tile.tileHeight)].solid)
-				&& (tiles[(int) (e.getBounds().x / Tile.tileWidth)
-						+ 1][(int) ((e.getBounds().y + (e.getBounds().height)) / Tile.tileHeight)].solid)) {
-			return tiles[(int) (e.getBounds().x / Tile.tileWidth)
-					+ 1][(int) ((e.getBounds().y + (e.getBounds().height)) / Tile.tileHeight)].turnsGravityOn;
-		} else if ((tiles[(int) ((e.getBounds().x) / Tile.tileWidth)][(int) ((e.getBounds().y + (e.getBounds().height))
-				/ Tile.tileHeight)].solid)
-				&& (tiles[(int) (e.getBounds().x / Tile.tileWidth)
-						+ 1][(int) ((e.getBounds().y + (e.getBounds().height)) / Tile.tileHeight)].solid)) {
+		
+		else if (!(tiles[(int) ((e.getBounds().x) / Tile.tileWidth)][(int) ((e.getBounds().y + (e.getBounds().height)) / Tile.tileHeight)].solid)
+				&& (tiles[(int)((e.getBounds().getX() + e.getBounds().width)/ Tile.tileWidth)][(int) ((e.getBounds().y + (e.getBounds().height)) / Tile.tileHeight)].solid)) {
+			return tiles[(int)((e.getBounds().getX() + e.getBounds().width)/ Tile.tileWidth)][(int) ((e.getBounds().y + (e.getBounds().height)) / Tile.tileHeight)].turnsGravityOn;
+		} 
+		
+		else if ((tiles[(int) ((e.getBounds().x) / Tile.tileWidth)][(int) ((e.getBounds().y + (e.getBounds().height)) / Tile.tileHeight)].solid)
+				&& (tiles[(int)((e.getBounds().getX() + e.getBounds().width)/ Tile.tileWidth)][(int) ((e.getBounds().y + (e.getBounds().height)) / Tile.tileHeight)].solid)) {
 			return false;
 		}
 		return true;

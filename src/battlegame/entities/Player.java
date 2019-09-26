@@ -18,8 +18,8 @@ public class Player extends Creature{
 		jumpSpeed = -6.0F;
 		bounds.x = (int) x;
 		bounds.y = (int) (y - bounds.height);
-		bounds.height = 36;
-		bounds.width = 26;
+		bounds.height = 38;
+		bounds.width = 24;
 	}
 
 	@Override
