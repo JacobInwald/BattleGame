@@ -19,7 +19,7 @@ public class Player extends Creature{
 		bounds.x = (int) x;
 		bounds.y = (int) (y - bounds.height);
 		bounds.height = 38;
-		bounds.width = 24;
+		bounds.width = 22;
 	}
 
 	@Override
@@ -27,14 +27,14 @@ public class Player extends Creature{
 		if(health <= 0)
 			die();
 		getInput();
-		//attack();
 		move();
 	}
 
 	@Override
 	public void render(Graphics g) {
 		g.drawImage(texture, (int)x, (int)y, width, height, null);
-		//g.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
+		
+		g.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
 	}
 	
 	public void getInput() {
