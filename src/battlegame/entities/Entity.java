@@ -4,7 +4,7 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
-import battlegame.entities.entitymanager.EntityManager;
+import battlegame.Main;
 
 public abstract class Entity {
 	
@@ -31,8 +31,14 @@ public abstract class Entity {
 	
 	public abstract void die();
 	
-	public boolean collisionWithEntity() {
-		return EntityManager.checkEntityCollision(this);
+	public boolean collisionWithEntity(float xOffset, float yOffset) {
+		for(Entity e : Main.getGame().getCurrentWorld().getEntityManager().getEntities()) {
+			if(e.equals(this))
+				continue;
+			if(e.getBounds().intersects(new Rectangle((int)(bounds.x + xOffset), (int)(bounds.y + yOffset), bounds.width, bounds.height)))
+				return true;
+		}
+		return false;
 	}
 	
 	public Rectangle getBounds() {
@@ -54,7 +60,7 @@ public abstract class Entity {
 	public int getHeight() {
 		return height;
 	}
-
+	
 	public boolean isActive() {
 		return active;
 	}

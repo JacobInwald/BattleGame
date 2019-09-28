@@ -1,25 +1,25 @@
-package battlegame.entities;
+package battlegame.entities.players;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
-import java.awt.image.BufferedImage;
-
 import battlegame.Main;
+import battlegame.entities.Bullet;
+import battlegame.entities.Creature;
 import battlegame.graphics.Assets;
-import battlegame.world.World;
 
-public class Player extends Creature{
+public class PlatformingPlayer extends Creature{
 	
 	private long lastAttackTimer, attackCooldown = 500, attackTimer = attackCooldown;	
-	public Player(float x, float y){
-		super(x, y, 32, 45, Assets.player);
+	public PlatformingPlayer(float x, float y){
+		super(x, y, 48, 68, Assets.player);
 		health = 10;
-		walkingSpeed = 3;
+		walkingSpeed = 2.75F;
 		jumpSpeed = -6.0F;
 		bounds.x = (int) x;
 		bounds.y = (int) (y - bounds.height);
-		bounds.height = 38;
-		bounds.width = 22;
+		bounds.height = 51;
+		bounds.width = 30;
 	}
 
 	@Override
@@ -27,13 +27,13 @@ public class Player extends Creature{
 		if(health <= 0)
 			die();
 		getInput();
-		move();
+		platformerMove();
 	}
 
 	@Override
 	public void render(Graphics g) {
 		g.drawImage(texture, (int)x, (int)y, width, height, null);
-		
+		g.setColor(Color.BLUE);
 		g.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
 	}
 	
@@ -43,7 +43,7 @@ public class Player extends Creature{
 			}
 		if(Main.getGame().getKeyController().keyJustPressed(KeyEvent.VK_W) 
 			|| Main.getGame().getKeyController().keyJustPressed(KeyEvent.VK_UP)) {
-			jump();
+			jumpPlatforming();
 		}
 		if(Main.getGame().getKeyController().right || Main.getGame().getKeyController().rightAlt) {
 			lastAttackDirectionPressed = KeyEvent.VK_D;
@@ -64,9 +64,9 @@ public class Player extends Creature{
 		if(attackTimer <  attackCooldown)
 			return;
 		if(lastAttackDirectionPressed == KeyEvent.VK_D)
-			World.getEntityManager().getAddEntityList().add(new Bullet(this.x + this.width + 1, this.y - 1, 1, this));
+			Main.getGame().getCurrentWorld().getEntityManager().getAddEntityList().add(new Bullet(this.x + this.width + 1, this.y + (height / 2), 1, this));
 		else if(lastAttackDirectionPressed == KeyEvent.VK_A)
-			World.getEntityManager().getAddEntityList().add(new Bullet(this.x - 1, this.y - 1, -1, this));
+			Main.getGame().getCurrentWorld().getEntityManager().getAddEntityList().add(new Bullet(this.x - (this.width / 2), this.y + (height / 2), -1, this));
 		
 		attackTimer = 0;
 	}

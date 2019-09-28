@@ -21,7 +21,7 @@ public class Game implements Runnable{
 	private BufferStrategy bs;
 	private Graphics g;
 	
-	private World world;
+	private World currentWorld;
 	private KeyboardController keyController;
 	
 	public Game() {
@@ -32,8 +32,8 @@ public class Game implements Runnable{
 		display = new Display(screenWidth, screenHeight);
 		display.getFrame().addKeyListener(keyController);
 		Assets.init();
-		world = new World("C:/Users/jacob/eclipse-workspace/BattleGame/res/worlds/Level1.txt");
-		world.init();
+		currentWorld = new World("/testlvl.txt");
+		currentWorld.init();
 	}
 
 	public synchronized void start() {
@@ -57,7 +57,7 @@ public class Game implements Runnable{
 	
 	public void tick() {	
 		keyController.tick();
-		world.tick();
+		currentWorld.tick();
 	}
 	
 	public void render() {
@@ -68,7 +68,7 @@ public class Game implements Runnable{
 		}
 		g = bs.getDrawGraphics();
 		g.clearRect(0, 0, screenWidth, screenHeight);
-		world.render(g);
+		currentWorld.render(g);
 		bs.show();
 		g.dispose();
 	}
@@ -102,7 +102,10 @@ public class Game implements Runnable{
 	public KeyboardController getKeyController(){
 		return keyController;
 	}
-	
+
+	public World getCurrentWorld() {
+		return currentWorld;
+	}
 	
 	}
 

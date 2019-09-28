@@ -5,8 +5,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import battlegame.background.Background;
-import battlegame.entities.Player;
+import battlegame.entities.enemies.Gooi;
 import battlegame.entities.entitymanager.EntityManager;
+import battlegame.entities.players.PlatformingPlayer;
 import battlegame.graphics.Assets;
 import battlegame.utility.Utilities;
 import battlegame.world.tiles.Tile;
@@ -14,29 +15,32 @@ import battlegame.world.tiles.TileManager;
 
 public class World {
 	
-	private static int width, height;
-	private static int[][] tiles;
+	private int width, height;
+	private int[][] tiles;
 	private ArrayList<Integer> ids;
 	private int[] idArray;
 	private Background bg;
 	private String path;
 	private String file;
-	private static EntityManager entityManager;
+	private EntityManager entityManager;
 	private TileManager tileManager;
-	private Player player;
+	private PlatformingPlayer player;
 	
 	public World(String path) {
 		this.path = path;
 		ids = new ArrayList<Integer>();
 		entityManager = new EntityManager();
 		tileManager = new TileManager();
-		player = new Player(300, 200);
+		player = new PlatformingPlayer(300, 200);
 		bg = new Background(Assets.background, width * Tile.tileWidth, height * Tile.tileHeight);
 		
 	}
 
 	public void init() throws IOException {
 		entityManager.addEntity(player);
+		entityManager.addEntity(new Gooi(300, 200));
+		entityManager.addEntity(new Gooi(300, 300));
+
 		parseTileMap();
 		
 		tileManager.init();
@@ -57,7 +61,7 @@ public class World {
 	}
 	
 	
-	public static Tile getTile(int x, int y) {
+	public Tile getTile(int x, int y) {
 		if(x > width || y > height || x < 0 || y < 0) 
 			return Tile.skyTile;
 		
@@ -74,8 +78,8 @@ public class World {
 			ids.add(Utilities.parseInt(s));
 		}
 		idArray = ids.stream().mapToInt(Integer::intValue).toArray();
-		World.width = idArray[0];
-		World.height = idArray[1];
+		this.width = idArray[0];
+		this.height = idArray[1];
 		tiles = new int[width][height];
 		for(int y = 0; y < height; y++) {
 			for(int x = 0; x < width; x++) {
@@ -87,21 +91,24 @@ public class World {
 
 	}
 
-	public static int getWidth() {
+	public int getWidth() {
 		return width;
 	}
 
-	public static int getHeight() {
+	public int getHeight() {
 		return height;
 	}
 
-	public static int[][] getTiles() {
+	public int[][] getTiles() {
 		return tiles;
 	}
 
-	public static EntityManager getEntityManager() {
+	public EntityManager getEntityManager() {
 		return entityManager;
 	}
 
+	public TileManager getTileManager() {
+		return tileManager;
+	}
 	
 }

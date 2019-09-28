@@ -3,12 +3,11 @@ package battlegame.entities.entitymanager;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
-import battlegame.entities.Bullet;
 import battlegame.entities.Entity;
 
 public class EntityManager {
 	
-	private static ArrayList<Entity> entities;
+	private  ArrayList<Entity> entities;
 	private ArrayList<Entity> addEntityList;
 	private ArrayList<Entity> removeEntityList;
 
@@ -50,8 +49,11 @@ public class EntityManager {
 		}
 	}
 	
-	public static boolean checkEntityCollision(Entity o) {
+	public boolean checkEntityCollision(Entity o) {
 		for(Entity e : entities) {
+			
+			if(e.equals(o))
+				continue;
 			
 			if(o.getBounds().intersects(e.getBounds()))
 				return true;
@@ -60,10 +62,10 @@ public class EntityManager {
 		return false;
 	}
 	
-	public static boolean checkEntityCollisionWithBullet(Entity firer, Entity o) {
+	public boolean checkEntityCollisionWithBullet(Entity firer, Entity o) {
 		for(Entity e : entities) {
 			
-			if(e.equals(firer)) 
+			if(e.equals(firer) || e.equals(o)) 
 				return false;
 			
 			if(o.getBounds().intersects(e.getBounds()))
@@ -72,9 +74,13 @@ public class EntityManager {
 		
 		return false;
 	}
-
-	public static Entity returnEntityCollisions(Entity o) {
+	
+	public Entity returnEntityCollisions(Entity o) {
 		for(Entity e : entities) {
+			
+			if(e.equals(o))
+				continue;
+			
 			if(o.getBounds().intersects(e.getBounds()))
 				return e;
 		} 
@@ -85,8 +91,10 @@ public class EntityManager {
 	public ArrayList<Entity> getAddEntityList() {
 		return addEntityList;
 	}
-	
-	
+
+	public  ArrayList<Entity> getEntities() {
+		return entities;
+	}
 	
 }
 

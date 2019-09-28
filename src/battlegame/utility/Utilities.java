@@ -1,22 +1,24 @@
 package battlegame.utility;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 public class Utilities {
 
 	public static String loadFileAsString(String path) throws IOException {
 		StringBuilder newString = new StringBuilder();
-		BufferedReader reader = new BufferedReader(new FileReader(path));
+		InputStream inputStream = Utilities.class.getResourceAsStream(path);
+		InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+		BufferedReader reader = new BufferedReader(inputStreamReader);
 		String line = reader.readLine();
 		while(line != null) {
 			newString.append(line + "\n");
 			line = reader.readLine();
 		}
 		return newString.toString();
-		
 		
 	}
 	

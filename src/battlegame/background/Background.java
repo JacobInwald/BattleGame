@@ -3,8 +3,6 @@ package battlegame.background;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
-import battlegame.world.World;
-
 public class Background {
 	
 	private BufferedImage texture;

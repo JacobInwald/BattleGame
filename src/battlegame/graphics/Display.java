@@ -25,6 +25,7 @@ public class Display {
 		frame.setVisible(true);
 		frame.setSize(screenWidth, screenHeight);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setResizable(false);
 		
 		canvas = new Canvas();
 		canvas.setPreferredSize(new Dimension(screenWidth, screenHeight));

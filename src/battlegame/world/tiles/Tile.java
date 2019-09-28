@@ -14,10 +14,9 @@ public class Tile {
 	public static Tile bouncyTile = new BouncyTile(Assets.bouncyTile, 2);
 	public static Tile iceTile = new IceTile(Assets.player, 3);
 
-	public static int tileHeight = 32, tileWidth = 32;
+	public static int tileHeight = 48, tileWidth = 48;
 	
 	private BufferedImage texture;
-	private int id;
 	protected boolean bouncy = false;
 	protected boolean solid = false;
 	protected boolean turnsGravityOn = true;
@@ -29,7 +28,6 @@ public class Tile {
 	
 	public Tile(BufferedImage texture, int id) {
 		this.texture = texture;
-		this.id = id;
 		tiles[id] = this;
 	}
 
