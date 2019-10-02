@@ -122,13 +122,16 @@ import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.beans.property.LongProperty;
 import javafx.beans.property.SimpleLongProperty;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class Game extends Application{
@@ -136,6 +139,10 @@ public class Game extends Application{
 	public static int screenWidth = 1248;
 	public static int screenHeight = 624;
 		
+	 private final long[] frameTimes = new long[100];
+	 private int frameTimeIndex = 0 ;
+	 private boolean arrayFilled = false ;
+	
 	private Canvas canvas;
 	private boolean upTyped = true;
 	private Stage stage;
@@ -168,10 +175,26 @@ public class Game extends Application{
 	@Override
 	public void start(Stage primaryStage)throws Exception {
 		initialise();
+		
+		Label label = new Label();
+		
 		final AnimationTimer timer = new AnimationTimer() {
 		    @Override
 		    public void handle(long timestamp) {
-		        if (lastUpdateTime.get() > 16.6666666667) {
+		    	long oldFrameTime = frameTimes[frameTimeIndex] ;
+                frameTimes[frameTimeIndex] = timestamp ;
+                frameTimeIndex = (frameTimeIndex + 1) % frameTimes.length ;
+                if (frameTimeIndex == 0) {
+                    arrayFilled = true ;
+                }
+                if (arrayFilled) {
+                    long elapsedNanos = timestamp - oldFrameTime ;
+                    long elapsedNanosPerFrame = elapsedNanos / frameTimes.length ;
+                    double frameRate = 1_000_000_000.0 / elapsedNanosPerFrame ;
+                    System.out.println(frameRate);
+                }
+            
+		        if (lastUpdateTime.get() > 0) {
 		        	tick();
 		            render();
 		        }

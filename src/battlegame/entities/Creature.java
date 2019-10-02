@@ -35,8 +35,7 @@ public abstract class Creature extends Entity {
 					ySpeed += 0.05;
 				if(gravityOn && !ableToWallSlide && affectedByPhysics) 
 					ySpeed  += gPerFrame; 
-				
-				System.out.println(jumpsDone);
+
 				checkCreatureCollisionsPlatforming();
 				moveXPlatforming();
 				moveYPlatforming();
