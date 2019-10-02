@@ -144,6 +144,7 @@ public class Game extends Application{
 	 private boolean arrayFilled = false ;
 	
 	private Canvas canvas;
+	private double frameRate = 0;
 	private boolean upTyped = true;
 	private Stage stage;
 	private Scene scene;
@@ -190,11 +191,11 @@ public class Game extends Application{
                 if (arrayFilled) {
                     long elapsedNanos = timestamp - oldFrameTime ;
                     long elapsedNanosPerFrame = elapsedNanos / frameTimes.length ;
-                    double frameRate = 1_000_000_000.0 / elapsedNanosPerFrame ;
+                    frameRate = 1_000_000_000.0 / elapsedNanosPerFrame ;
                     System.out.println(frameRate);
                 }
             
-		        if (lastUpdateTime.get() > 0) {
+		        if (frameRate >= 60) {
 		        	tick();
 		            render();
 		        }
