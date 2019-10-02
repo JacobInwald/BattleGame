@@ -1,12 +1,13 @@
 package battlegame.entities.players;
 
-import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.event.KeyEvent;
-import battlegame.Main;
+
+import battlegame.Game;
 import battlegame.entities.Bullet;
 import battlegame.entities.Creature;
 import battlegame.graphics.Assets;
+import battlegame.graphics.AudioLoader;
+import javafx.scene.canvas.GraphicsContext;
 
 public class PlatformingPlayer extends Creature{
 	
@@ -14,7 +15,7 @@ public class PlatformingPlayer extends Creature{
 	public PlatformingPlayer(float x, float y){
 		super(x, y, 48, 68, Assets.player);
 		health = 10;
-		walkingSpeed = 2.75F;
+		walkingSpeed = 3.0F;
 		jumpSpeed = -6.0F;
 		bounds.x = (int) x;
 		bounds.y = (int) (y - bounds.height);
@@ -31,29 +32,28 @@ public class PlatformingPlayer extends Creature{
 	}
 
 	@Override
-	public void render(Graphics g) {
-		g.drawImage(texture, (int)x, (int)y, width, height, null);
-		g.setColor(Color.BLUE);
-		g.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
+	public void render(GraphicsContext g) {
+		g.drawImage(texture, (int)x, (int)y, width, height);
+		//g.setColor(Color.RED);
+		//g.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
 	}
 	
 	public void getInput() {
-		if(Main.getGame().getKeyController().down || Main.getGame().getKeyController().downAlt) {
+		if(Game.getKeyController().down) {
 				return;
 			}
-		if(Main.getGame().getKeyController().keyJustPressed(KeyEvent.VK_W) 
-			|| Main.getGame().getKeyController().keyJustPressed(KeyEvent.VK_UP)) {
+		if(Game.getKeyController().up) {
 			jumpPlatforming();
 		}
-		if(Main.getGame().getKeyController().right || Main.getGame().getKeyController().rightAlt) {
+		if(Game.getKeyController().right) {
 			lastAttackDirectionPressed = KeyEvent.VK_D;
 			xSpeed = walkingSpeed;
 		}
-		if(Main.getGame().getKeyController().left || Main.getGame().getKeyController().leftAlt) {
+		if(Game.getKeyController().left) {
 			lastAttackDirectionPressed = KeyEvent.VK_A;
 			xSpeed = -walkingSpeed;
 		}
-		if(Main.getGame().getKeyController().o || Main.getGame().getKeyController().z) {
+		if(Game.getKeyController().select) {
 			attack();
 		}
 	}
@@ -63,18 +63,25 @@ public class PlatformingPlayer extends Creature{
 		lastAttackTimer = System.currentTimeMillis();
 		if(attackTimer <  attackCooldown)
 			return;
+		this.platformerMove();
 		if(lastAttackDirectionPressed == KeyEvent.VK_D)
-			Main.getGame().getCurrentWorld().getEntityManager().getAddEntityList().add(new Bullet(this.x + this.width + 1, this.y + (height / 2), 1, this));
+			Game.getCurrentWorld().getEntityManager().getAddEntityList().add(new Bullet(this.x + this.width + 1, this.y + (height / 2), 1, this));
 		else if(lastAttackDirectionPressed == KeyEvent.VK_A)
-			Main.getGame().getCurrentWorld().getEntityManager().getAddEntityList().add(new Bullet(this.x - (this.width / 2), this.y + (height / 2), -1, this));
+			Game.getCurrentWorld().getEntityManager().getAddEntityList().add(new Bullet(this.x - (this.width / 2), this.y + (height / 2), -1, this));
 		
 		attackTimer = 0;
 	}
 	
 	@Override
 	public void die() {
+		//AudioLoader.stopMusic();
+		//AudioLoader.loadMusic(Assets.testSong);
+		//AudioLoader.playMusic();
 		active = false;
 		System.out.println("You Died!");
+		x = 300;
+		y = 200;
+		active = true;
 	}
 
 }

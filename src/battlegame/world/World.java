@@ -12,6 +12,7 @@ import battlegame.graphics.Assets;
 import battlegame.utility.Utilities;
 import battlegame.world.tiles.Tile;
 import battlegame.world.tiles.TileManager;
+import javafx.scene.canvas.GraphicsContext;
 
 public class World {
 	
@@ -31,17 +32,19 @@ public class World {
 		ids = new ArrayList<Integer>();
 		entityManager = new EntityManager();
 		tileManager = new TileManager();
-		player = new PlatformingPlayer(300, 200);
+		player = new PlatformingPlayer(300, 155);
 		bg = new Background(Assets.background, width * Tile.tileWidth, height * Tile.tileHeight);
-		
+
 	}
 
-	public void init() throws IOException {
+	public void init() {
 		entityManager.addEntity(player);
 		entityManager.addEntity(new Gooi(300, 200));
-		entityManager.addEntity(new Gooi(300, 300));
-
-		parseTileMap();
+		try {
+			parseTileMap();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
 		tileManager.init();
 	}
@@ -50,15 +53,23 @@ public class World {
 		entityManager.tickEntities();
 	}	
 	
-	public void render(Graphics g) {
-		bg.render(g);
-		for(int x = 0; x < width; x ++) {
-			for(int y = 0; y < height; y++) {
-				g.drawImage(getTile(x, y).getTexture(), x * Tile.tileWidth, y * Tile.tileHeight, Tile.tileWidth, Tile.tileHeight, null);
+	public void render(GraphicsContext g) {
+		for(int i = 0; i < 3; i ++) {
+			if(i == 0)
+				bg.render(g);
+			if(i == 1) {
+				for(int x = 0; x < width; x ++) {
+					for(int y = 0; y < height; y++) {
+						g.drawImage(getTile(x, y).getTexture(), x * Tile.tileWidth, y * Tile.tileHeight, Tile.tileWidth, Tile.tileHeight);
+					}
+				}
 			}
+			if(i == 2)
+				entityManager.renderEntities(g);
+				
 		}
-		entityManager.renderEntities(g);
 	}
+	
 	
 	
 	public Tile getTile(int x, int y) {

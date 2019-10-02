@@ -1,9 +1,9 @@
 package battlegame.entities.entitymanager;
 
-import java.awt.Graphics;
 import java.util.ArrayList;
 
 import battlegame.entities.Entity;
+import javafx.scene.canvas.GraphicsContext;
 
 public class EntityManager {
 	
@@ -43,7 +43,7 @@ public class EntityManager {
 		
 	}
 	
-	public void renderEntities(Graphics g) {
+	public void renderEntities(GraphicsContext g) {
 		for(Entity e : entities) {
 			e.render(g);
 		}

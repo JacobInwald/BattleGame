@@ -1,10 +1,10 @@
 package battlegame.world.tiles;
 
-import java.awt.image.BufferedImage;
+import javafx.scene.image.Image;
 
 public class TopDirtTile extends Tile {
 
-	public TopDirtTile(BufferedImage texture, int id) {
+	public TopDirtTile(Image texture, int id) {
 		super(texture, id);
 		this.solid = true;
 		this.turnsGravityOn = false;

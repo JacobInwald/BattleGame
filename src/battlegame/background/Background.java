@@ -1,21 +1,21 @@
 package battlegame.background;
 
-import java.awt.Graphics;
-import java.awt.image.BufferedImage;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 
 public class Background {
 	
-	private BufferedImage texture;
+	private Image texture;
 	private int width, height;
 	
-	public Background(BufferedImage texture, int width, int height) {
-		this.texture = texture;
+	public Background(Image background, int width, int height) {
+		this.texture = background;
 		this.width = width;
 		this.height = height;
 	}
 	
-	public void render(Graphics g) {
-		g.drawImage(texture, 0, 0, width, height, null);
+	public void render(GraphicsContext g) {
+		g.drawImage(texture, 0, 0, width, height);
 	}
 
 	public int getWidth() {

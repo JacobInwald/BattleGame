@@ -1,10 +1,11 @@
 package battlegame.world.tiles;
 
-import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 import battlegame.graphics.Assets;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 
 public class Tile {
 	
@@ -16,7 +17,7 @@ public class Tile {
 
 	public static int tileHeight = 48, tileWidth = 48;
 	
-	private BufferedImage texture;
+	private Image texture;
 	protected boolean bouncy = false;
 	protected boolean solid = false;
 	protected boolean turnsGravityOn = true;
@@ -26,7 +27,7 @@ public class Tile {
 	public Rectangle bounds;
 	
 	
-	public Tile(BufferedImage texture, int id) {
+	public Tile(Image texture, int id) {
 		this.texture = texture;
 		tiles[id] = this;
 	}
@@ -35,11 +36,11 @@ public class Tile {
 		
 	}
 	
-	public void render(Graphics g) {
-		g.drawImage(texture, (int)x, (int)y, null);
+	public void render(GraphicsContext g) {
+		g.drawImage(texture, x, y);
 	}
 
-	public BufferedImage getTexture() {
+	public Image getTexture() {
 		return texture;
 	}
 

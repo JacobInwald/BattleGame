@@ -1,10 +1,9 @@
 package battlegame.entities;
 
-import java.awt.Graphics;
-
-import battlegame.Main;
+import battlegame.Game;
 import battlegame.graphics.Assets;
 import battlegame.world.tiles.Tile;
+import javafx.scene.canvas.GraphicsContext;
 
 public class Bullet extends Creature{
 
@@ -26,26 +25,26 @@ public class Bullet extends Creature{
 		startingX = x;
 		affectedByPhysics = false;
 		isWeapon = true;
+		xSpeed = bulletSpeed;
 	}
 
 	@Override
 	public void tick() {
-		xSpeed = bulletSpeed;
 		checkDistanceTravelled();
 		checkHits();
 		platformerMove();
 	}
 	
-	public void render(Graphics g) {
+	public void render(GraphicsContext g) {
 		g.fillRect((int) x, (int) y, width, height);
 	}
 
 	public void checkHits() {
-		if(Main.getGame().getCurrentWorld().getTileManager().checkTileCollision(this)) {
+		if(Game.getCurrentWorld().getTileManager().checkTileCollision(this)) {
 			die();
 			return;
 		}
-		for(Entity e : Main.getGame().getCurrentWorld().getEntityManager().getEntities()) {
+		for(Entity e : Game.getCurrentWorld().getEntityManager().getEntities()) {
 			if(e.equals(firer) || e.equals(this)) {
 				continue;
 			}

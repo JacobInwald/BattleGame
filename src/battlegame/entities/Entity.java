@@ -1,21 +1,21 @@
 package battlegame.entities;
 
-import java.awt.Graphics;
 import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
 
-import battlegame.Main;
+import battlegame.Game;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 
 public abstract class Entity {
 	
 	protected float x , y;
 	protected int width, height;
-	protected BufferedImage texture;
+	protected Image texture;
 	protected int health = 10;
 	protected Rectangle bounds;
 	protected boolean active = true;
 	
-	public Entity(float x, float y, int width, int height, BufferedImage texture) {
+	public Entity(float x, float y, int width, int height, Image texture) {
 		this.x = x;
 		this.y = y;
 		this.width = width;
@@ -27,12 +27,12 @@ public abstract class Entity {
 
 	public abstract void tick();
 	
-	public abstract void render(Graphics g);
+	public abstract void render(GraphicsContext g);
 	
 	public abstract void die();
 	
 	public boolean collisionWithEntity(float xOffset, float yOffset) {
-		for(Entity e : Main.getGame().getCurrentWorld().getEntityManager().getEntities()) {
+		for(Entity e : Game.getCurrentWorld().getEntityManager().getEntities()) {
 			if(e.equals(this))
 				continue;
 			if(e.getBounds().intersects(new Rectangle((int)(bounds.x + xOffset), (int)(bounds.y + yOffset), bounds.width, bounds.height)))
