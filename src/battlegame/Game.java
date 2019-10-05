@@ -1,115 +1,3 @@
-//package battlegame;
-//
-//import java.awt.Graphics;
-//import java.awt.image.BufferStrategy;
-//import java.io.IOException;
-//
-//import battlegame.graphics.Assets;
-//import battlegame.graphics.AudioLoader;
-//import battlegame.graphics.Display;
-//import battlegame.input.KeyboardController;
-//import battlegame.world.World;
-//
-//public class Game implements Runnable{
-//	
-//	public static int screenWidth = 1248;
-//	public static int screenHeight = 640;
-//	
-//	private Thread thread;
-//	private boolean running = false;
-//	
-//	private Display display;
-//	private BufferStrategy bs;
-//	private Graphics g;
-//	
-//	private World currentWorld;
-//	private KeyboardController keyController;
-//	
-//	public Game() {
-//		keyController = new KeyboardController();
-//	}
-//	
-//	public void init() throws IOException {
-//		display = new Display(screenWidth, screenHeight);
-//		display.getFrame().addKeyListener(keyController);
-//		Assets.init();
-//		currentWorld = new World("/testlvl.txt");
-//		currentWorld.init();
-//	}
-//
-//	public synchronized void start() {
-//		if (running) 
-//			return;
-//		running = true;
-//		thread = new Thread(this);
-//		thread.start();
-//	}
-//	
-//	public synchronized void stop() {
-//		if(!running)
-//			return;
-//		running = false;
-//		try {
-//			thread.join();
-//		} catch (InterruptedException e) {
-//			e.printStackTrace();
-//		}
-//	}
-//	
-//	public void tick() {	
-//		keyController.tick();
-//		currentWorld.tick();
-//		
-//	}
-//	
-//	public void render() {
-//		bs = display.getCanvas().getBufferStrategy();
-//		if(bs == null) {
-//			display.getCanvas().createBufferStrategy(3);
-//			return;
-//		}
-//		
-//		g = bs.getDrawGraphics();
-//		g.clearRect(0, 0, screenWidth, screenHeight);
-//		currentWorld.render(g);
-//		bs.show();
-//		g.dispose();
-//	}
-//	
-//	public void run() {
-//		try {
-//			init();
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		
-//		int fps = 60;
-//		double timePerTick = 1000000000 / fps;
-//		long currentTime = System.nanoTime();
-//		long newTime = 0;
-//		while(running) {
-//			newTime = System.nanoTime();
-//			if((newTime - currentTime) <= timePerTick)
-//				continue;
-//
-//			currentTime = System.nanoTime();
-//			render();
-//			tick();
-//		}
-//			
-//		}
-//	
-//	public KeyboardController getKeyController(){
-//		return keyController;
-//	}
-//
-//	public World getCurrentWorld() {
-//		return currentWorld;
-//	}
-//
-//	
-//}
 
 package battlegame;
 
@@ -118,39 +6,40 @@ import java.io.IOException;
 import battlegame.graphics.Assets;
 import battlegame.input.KeyboardController;
 import battlegame.world.World;
-import javafx.animation.AnimationTimer;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.TimelineBuilder;
 import javafx.application.Application;
 import javafx.beans.property.LongProperty;
 import javafx.beans.property.SimpleLongProperty;
-import javafx.geometry.Pos;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 public class Game extends Application{
 	
-	public static int screenWidth = 1248;
-	public static int screenHeight = 624;
+	public static int screenWidth = 920;
+	public static int screenHeight = 600;
 		
 	 private final long[] frameTimes = new long[100];
 	 private int frameTimeIndex = 0 ;
 	 private boolean arrayFilled = false ;
 	
 	private Canvas canvas;
-	private double frameRate = 0;
 	private boolean upTyped = true;
 	private Stage stage;
 	private Scene scene;
 	private Group group;
 	private GraphicsContext g;
-	private final LongProperty lastUpdateTime = new SimpleLongProperty(0);
+	private final Duration fpsTime = Duration.millis(1000/60);
 	private static World currentWorld;
 	private static KeyboardController keyController;
 	
@@ -171,43 +60,48 @@ public class Game extends Application{
 		currentWorld = new World("/testlvl.txt");
 		currentWorld.init();
 
+
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void start(Stage primaryStage)throws Exception {
 		initialise();
-		
-		Label label = new Label();
-		
-		final AnimationTimer timer = new AnimationTimer() {
-		    @Override
-		    public void handle(long timestamp) {
-		    	long oldFrameTime = frameTimes[frameTimeIndex] ;
-                frameTimes[frameTimeIndex] = timestamp ;
-                frameTimeIndex = (frameTimeIndex + 1) % frameTimes.length ;
-                if (frameTimeIndex == 0) {
-                    arrayFilled = true ;
-                }
-                if (arrayFilled) {
-                    long elapsedNanos = timestamp - oldFrameTime ;
-                    long elapsedNanosPerFrame = elapsedNanos / frameTimes.length ;
-                    frameRate = 1_000_000_000.0 / elapsedNanosPerFrame ;
-                    System.out.println(frameRate);
-                }
-            
-		        if (frameRate >= 60) {
-		        	tick();
-		            render();
-		        }
-		        lastUpdateTime.set(timestamp);
-		    }
-		};
+
+		@SuppressWarnings({ "unchecked", "rawtypes" })
+		final KeyFrame oneFrame = new KeyFrame(fpsTime,
+		   new EventHandler() {
+			@Override
+			public void handle(Event event) {
+			      render();
+			      tick();
+			 				
+			      long oldFrameTime = frameTimes[frameTimeIndex] ;
+	                frameTimes[frameTimeIndex] = System.nanoTime() ;
+	                frameTimeIndex = (frameTimeIndex + 1) % frameTimes.length ;
+	                if (frameTimeIndex == 0) {
+	                    arrayFilled = true ;
+	                }
+	                if (arrayFilled) {
+	                    long elapsedNanos = System.nanoTime() - oldFrameTime ;
+	                    long elapsedNanosPerFrame = elapsedNanos / frameTimes.length ;
+	                    double frameRate = 1_000_000_000.0 / elapsedNanosPerFrame ;
+	                }
+			}
+
+		});
+		 
+		TimelineBuilder.create()
+		   .cycleCount(Animation.INDEFINITE)
+		   .keyFrames(oneFrame)
+		   .build()
+		   .play();
 		stage = primaryStage;
 		stage.getIcons().add(new Image(Game.class.getResourceAsStream("/GameIcon.png")));
 		stage.setScene(scene);
 		stage.setResizable(true);
 		stage.setOnCloseRequest(event -> {
-			timer.stop();
+		
 		});
 		stage.show();
 		scene.addEventHandler(KeyEvent.KEY_PRESSED, (key) -> {
@@ -232,12 +126,6 @@ public class Game extends Application{
 		      }
 		      
 		});
-		/*scene.addEventHandler(KeyEvent.KEY_TYPED, (key) -> {
-		      if(key.getCode() == KeyCode.W || key.getCode() == KeyCode.UP || key.getCode() == KeyCode.SPACE) {
-		          keyController.up = true;
-		          System.out.println("YoIghtL/Kkjkjas");
-		      }
-		});*/
 		
 		scene.addEventHandler(KeyEvent.KEY_RELEASED, (key) -> {
 		      if(key.getCode() == KeyCode.W || key.getCode() == KeyCode.UP || key.getCode() == KeyCode.SPACE) {
@@ -260,9 +148,7 @@ public class Game extends Application{
 		    	  keyController.action = false;
 		      }		});
 		
-		
 
-		timer.start();   
 	}
 	
 	

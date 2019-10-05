@@ -15,7 +15,7 @@ public abstract class Creature extends Entity {
 	protected boolean affectedByPhysics = true, isJumping = false;
 	protected boolean isBouncing = false, ableToWallSlide = true, ableToWallJump = true;
 	protected boolean isWeapon = false;
-	protected int numberOfJumps = 1, jumpsDone = 0,  justJumped = 0;
+	protected int numberOfJumps = 100, jumpsDone = 0,  justJumped = 0;
 	protected static final float gPerFrame = 0.16333333333333333333F;
 	protected boolean gravityOn = false;
 	protected Tile[][] tiles;
@@ -27,18 +27,26 @@ public abstract class Creature extends Entity {
 //These are the functions for when the player is platforming. 
 			public void platformerMove() { 
 				ableToWallSlide = Game.getCurrentWorld().getTileManager().ableToWallSlide(this);
-				if(ableToWallSlide && justJumped < 2)
+				if(ableToWallSlide && justJumped < 200)
 					jumpsDone = 0;
-				if(ableToWallSlide && ySpeed < 0 && ableToWallJump) 
+				if(ableToWallSlide && ySpeed < 0 && ableToWallJump) {
 					ySpeed += 0.5;  
-				if(ableToWallSlide  && ySpeed >= 0 && ableToWallJump)
+					if( ySpeed > 3)
+						ySpeed = 3;
+				}
+				if(ableToWallSlide  && ySpeed >= 0 && ableToWallJump) {
 					ySpeed += 0.05;
+					if( ySpeed > 3)
+						ySpeed = 3;
+				}
 				if(gravityOn && !ableToWallSlide && affectedByPhysics) 
 					ySpeed  += gPerFrame; 
 
 				checkCreatureCollisionsPlatforming();
 				moveXPlatforming();
 				moveYPlatforming();
+				
+				isBouncing =false;
 				
 				x += xSpeed;
 				y += ySpeed;
@@ -49,6 +57,8 @@ public abstract class Creature extends Entity {
 				if(affectedByPhysics) { 
 					xSpeed = (float) (xSpeed / Game.getCurrentWorld().getTileManager().tileFrictionCoefficient(this));
 					ySpeed = (float) (ySpeed / (1 + gPerFrame / 10)); 
+					if (ySpeed >= 6)
+						ySpeed = 6;
 				}
 				bounds.x = (int) (x + (width - bounds.width) / 2);
 				bounds.y = (int) (y + (height - bounds.height));

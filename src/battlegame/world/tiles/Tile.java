@@ -13,9 +13,9 @@ public class Tile {
 	public static Tile skyTile = new SkyTile(Assets.skyTile, 0);
 	public static Tile brickTile = new BrickTile(Assets.brickTile, 1);
 	public static Tile bouncyTile = new BouncyTile(Assets.bouncyTile, 2);
-	public static Tile iceTile = new IceTile(Assets.player, 3);
+	public static Tile iceTile = new IceTile(Assets.topDirtTile, 3);
 
-	public static int tileHeight = 48, tileWidth = 48;
+	public static int tileHeight = 40, tileWidth = 40;
 	
 	private Image texture;
 	protected boolean bouncy = false;

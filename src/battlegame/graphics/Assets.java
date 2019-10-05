@@ -6,8 +6,9 @@ public class Assets {
 
 	public static int height = 32, width = 32;
 	public static int tileHeight = 32, tileWidth = 32;
+	public static int playerWidth = 32, playerHeight = 45; 
 	
-	public static Image player, gooiFront;
+	public static Image playerStandingForward, playerStandingRight, playerStandingLeft, gooiFront;
 	public static Image background;
 	public static Image skyTile, topDirtTile, brickTile, bouncyTile;
 	public static SpriteSheet arthurSprites, tiles, background1, gooiSprites;
@@ -20,7 +21,9 @@ public class Assets {
 		gooiSprites = new SpriteSheet("/GooiFront.png");
 		
 		
-		player = arthurSprites.cropSheet(0, 0, 32, 45);
+		playerStandingForward = arthurSprites.cropSheet(0, 0, playerWidth, playerHeight);
+		playerStandingRight = arthurSprites.cropSheet(playerWidth, playerHeight, playerWidth, playerHeight);
+		playerStandingLeft = arthurSprites.cropSheet(playerWidth * 3, playerHeight, playerWidth, playerHeight);
 		
 		gooiFront = gooiSprites.cropSheet(0, 0, width, height);
 		

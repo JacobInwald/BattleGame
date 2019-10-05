@@ -11,8 +11,8 @@ public class Gooi extends Enemy{
 		super(x, y, 48, 48, Assets.gooiFront);
 		bounds.height = 25;
 		bounds.width = 40;
-		//AudioLoader.loadMusic(Assets.samMusic);
-		//AudioLoader.playMusic();
+		AudioLoader.loadMusic(Assets.samMusic);
+		AudioLoader.playMusic();
 	}
 
 	@Override

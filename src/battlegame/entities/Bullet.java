@@ -13,7 +13,7 @@ public class Bullet extends Creature{
 	protected Entity firer;
 	
 	public Bullet(float x, float y, int direction, Entity firer) {
-		super(x, y, 16, 16, Assets.player);
+		super(x, y, 16, 16, Assets.topDirtTile);
 		if(!(firer == null))
 			this.firer = firer;
 		else
@@ -36,7 +36,8 @@ public class Bullet extends Creature{
 	}
 	
 	public void render(GraphicsContext g) {
-		g.fillRect((int) x, (int) y, width, height);
+		g.drawImage(texture, (int) x, (int) y, width, height);
+
 	}
 
 	public void checkHits() {

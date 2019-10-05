@@ -13,6 +13,7 @@ public class AudioLoader {
 
 	private static AudioInputStream in;
 	private static Clip currentSong;
+	private static int loops = 0;
 	
 	public static AudioInputStream loadMusic(String filePath) {
         try {
@@ -35,12 +36,18 @@ public class AudioLoader {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-        currentSong.loop(100);
+        currentSong.loop(loops);
 	}
 	
 	public static void stopMusic() {
 		currentSong.stop();
-		currentSong.close();
+		//currentSong.close();
 	}
+
+	public static void setLoops(int loops) {
+		AudioLoader.loops = loops;
+	}
+	
+	
 	
 }

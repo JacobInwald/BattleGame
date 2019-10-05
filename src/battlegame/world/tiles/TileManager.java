@@ -119,7 +119,7 @@ public class TileManager {
 		for(int x = 0; x < Game.getCurrentWorld().getWidth(); x++) {
 			for(int y = 0; y < Game.getCurrentWorld().getHeight(); y++) {
 				if (tiles[x][y].isSolid() && e.getBounds().intersects(bounds[x][y])
-					&& bounds[x][y].getY() < e.getBounds().y - 7.5) { 
+					&& bounds[x][y].getY() + bounds[x][y].getHeight() - 7.5 < e.getBounds().y) { 
 					return true;
 				}
 			}
@@ -175,8 +175,7 @@ public class TileManager {
 		// This checks the tiles to the left, underneath and on the entity to check whether 
 		// they are solid, not solid and not solid respectively. This is to ensure that the
 		// entity is actually allowed to wall slide
-		if ((tiles[(int)(e.getBounds().getX() / Tile.tileWidth)][(int) ((e.getBounds().y + (e.getBounds().height)) / Tile.tileHeight)].isSolid() 
-				|| tiles[(int)(e.getBounds().getX() / Tile.tileWidth)][(int) ((e.getBounds().y + (e.getBounds().height)) / Tile.tileHeight) + 1].isSolid()) 
+		if (tiles[(int)(e.getBounds().getX() / Tile.tileWidth)][(int) ((e.getBounds().y + (e.getBounds().height)) / Tile.tileHeight)].isSolid() 
 				&& !tiles[(int)((e.getBounds().getX() + e.getBounds().width)/ Tile.tileWidth)][(int) ((e.getBounds().y + (e.getBounds().height)) / Tile.tileHeight)].isSolid()
 				&& !tiles[(int)((e.getBounds().getX() + e.getBounds().width)/ Tile.tileWidth)][(int) ((e.getBounds().y + (e.getBounds().height)) / Tile.tileHeight) - 1].isSolid()
 				&& isCollidingInNegX(e)) {
@@ -186,8 +185,7 @@ public class TileManager {
 		// This checks the tiles to the right, underneath and on the entity to check whether 
 		// they are solid, not solid and not solid respectively. This is to ensure that the
 		// entity is actually allowed to wall slide
-		if ((tiles[(int)((e.getBounds().getX() + e.getBounds().width)/ Tile.tileWidth)][(int) ((e.getBounds().y + (e.getBounds().height)) / Tile.tileHeight)].isSolid()
-				|| tiles[(int)((e.getBounds().getX() + e.getBounds().width)/ Tile.tileWidth)][(int) ((e.getBounds().y + (e.getBounds().height)) / Tile.tileHeight) + 1].isSolid()) 
+		if (tiles[(int)((e.getBounds().getX() + e.getBounds().width)/ Tile.tileWidth)][(int) ((e.getBounds().y + (e.getBounds().height)) / Tile.tileHeight)].isSolid() 
 				&& !tiles[(int)(e.getBounds().getX() / Tile.tileWidth)][(int) ((e.getBounds().y + (e.getBounds().height)) / Tile.tileHeight)].isSolid()
 				&& !tiles[(int)(e.getBounds().getX() / Tile.tileWidth)][(int) ((e.getBounds().y + (e.getBounds().height)) / Tile.tileHeight) - 1].isSolid()
 				&& isCollidingInPosX(e)) {
@@ -199,35 +197,29 @@ public class TileManager {
 	}
 
 	public boolean returnTileBelowTurnsGravityOn(Entity e) {
-		// The statements (tiles[(int)(e.getBounds().x /
-		// Tile.tileWidth)][(int)(e.getBounds().y / Tile.tileHeight) + 1].solid) and
-		// (tiles[(int)(e.getBounds().x / Tile.tileWidth) + 1][(int)(e.getBounds().y /
-		// Tile.tileHeight) + 1].solid) checks whether the tiles
-		// to the left of the player is solid
-		// The statement (tiles[(int)((e.getBounds().x + e.getBounds().width) /
-		// Tile.tileWidth)][(int)(e.getBounds().y / Tile.tileHeight) + 1].solid) checks
-		// whether the tiles to the right of the player are solid
+		//This first if statement makes sure that an array out of bounds exeption is not called while running this method.
 
 		if((int)((e.getBounds().getX() + e.getBounds().width)/ Tile.tileWidth) >= Game.getCurrentWorld().getWidth()|| 
 				(int)(e.getBounds().getX() / Tile.tileWidth) < 0 || 
 				(int) ((e.getBounds().y + (e.getBounds().height)) / Tile.tileHeight) >= Game.getCurrentWorld().getHeight() ||
 				(int) ((e.getBounds().y) / Tile.tileHeight) < 0) 
 			return true;
-		
+		// This statement checks if an entity is to the left of a ledge and if so, returns the gravityOn value of the tile that is to the left of the ledge
 		if ((tiles[(int) (e.getBounds().x / Tile.tileWidth)][(int) ((e.getBounds().y + (e.getBounds().height)) / Tile.tileHeight)].solid) 
-			&& !(tiles[(int) (int)((e.getBounds().getX() + e.getBounds().width)/ Tile.tileWidth)][(int) ((e.getBounds().y + (e.getBounds().height)) / Tile.tileHeight)].solid)) {
+			&& !(tiles[(int)((e.getBounds().getX() + e.getBounds().width)/ Tile.tileWidth)][(int) ((e.getBounds().y + (e.getBounds().height)) / Tile.tileHeight)].solid)) {
 			return tiles[(int) (e.getBounds().x / Tile.tileWidth)][(int) ((e.getBounds().y + (e.getBounds().height)) / Tile.tileHeight)].turnsGravityOn;
 		}
-		
+		// This statement checks if an entity is to the right of a ledge and if so, returns the gravityOn value of the tile that is to the right of the ledge
 		else if (!(tiles[(int) ((e.getBounds().x) / Tile.tileWidth)][(int) ((e.getBounds().y + (e.getBounds().height)) / Tile.tileHeight)].solid)
 				&& (tiles[(int)((e.getBounds().getX() + e.getBounds().width)/ Tile.tileWidth)][(int) ((e.getBounds().y + (e.getBounds().height)) / Tile.tileHeight)].solid)) {
 			return tiles[(int)((e.getBounds().getX() + e.getBounds().width)/ Tile.tileWidth)][(int) ((e.getBounds().y + (e.getBounds().height)) / Tile.tileHeight)].turnsGravityOn;
 		} 
-		
+		// This statement checks whether the entity is on solid ground and if it is turns gravity off. 
 		else if ((tiles[(int) ((e.getBounds().x) / Tile.tileWidth)][(int) ((e.getBounds().y + (e.getBounds().height)) / Tile.tileHeight)].solid)
 				&& (tiles[(int)((e.getBounds().getX() + e.getBounds().width)/ Tile.tileWidth)][(int) ((e.getBounds().y + (e.getBounds().height)) / Tile.tileHeight)].solid)) {
 			return false;
 		}
+		// If none of these statements are correct it will return that gravity is on. 
 		return true;
 	}
 }
