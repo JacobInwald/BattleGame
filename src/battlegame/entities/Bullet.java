@@ -13,7 +13,7 @@ public class Bullet extends Creature{
 	protected Entity firer;
 	
 	public Bullet(float x, float y, int direction, Entity firer) {
-		super(x, y, 16, 16, Assets.topDirtTile);
+		super(x, y, 16, 16, Assets.playerStandingForward);
 		if(!(firer == null))
 			this.firer = firer;
 		else

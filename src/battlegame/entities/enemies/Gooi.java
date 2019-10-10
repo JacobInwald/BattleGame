@@ -17,6 +17,7 @@ public class Gooi extends Enemy{
 
 	@Override
 	public void tick() {
+		xSpeed = 1;
 		platformerMove();
 	}
 

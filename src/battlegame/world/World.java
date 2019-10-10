@@ -1,6 +1,5 @@
 package battlegame.world;
 
-import java.awt.Graphics;
 import java.io.IOException;
 import java.util.ArrayList;
 

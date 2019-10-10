@@ -15,19 +15,20 @@ public abstract class Creature extends Entity {
 	protected boolean affectedByPhysics = true, isJumping = false;
 	protected boolean isBouncing = false, ableToWallSlide = true, ableToWallJump = true;
 	protected boolean isWeapon = false;
-	protected int numberOfJumps = 100, jumpsDone = 0,  justJumped = 0;
+	protected int numberOfJumps = 2, jumpsDone = 0,  justJumped = 0;
 	protected static final float gPerFrame = 0.16333333333333333333F;
 	protected boolean gravityOn = false;
-	protected Tile[][] tiles;
 
 	public Creature(float x, float y, int width, int height, Image texture) {
 		super(x, y, width, height, texture);
 
 	}
 //These are the functions for when the player is platforming. 
-			public void platformerMove() { 
+			public void platformerMove() {				
+				System.out.println(gravityOn);
+
 				ableToWallSlide = Game.getCurrentWorld().getTileManager().ableToWallSlide(this);
-				if(ableToWallSlide && justJumped < 200)
+				if(ableToWallSlide && justJumped < 3)
 					jumpsDone = 0;
 				if(ableToWallSlide && ySpeed < 0 && ableToWallJump) {
 					ySpeed += 0.5;  
@@ -41,12 +42,12 @@ public abstract class Creature extends Entity {
 				}
 				if(gravityOn && !ableToWallSlide && affectedByPhysics) 
 					ySpeed  += gPerFrame; 
-
+				
 				checkCreatureCollisionsPlatforming();
 				moveXPlatforming();
-				moveYPlatforming();
+				//moveYPlatforming();
 				
-				isBouncing =false;
+				isBouncing = false;
 				
 				x += xSpeed;
 				y += ySpeed;
@@ -57,8 +58,8 @@ public abstract class Creature extends Entity {
 				if(affectedByPhysics) { 
 					xSpeed = (float) (xSpeed / Game.getCurrentWorld().getTileManager().tileFrictionCoefficient(this));
 					ySpeed = (float) (ySpeed / (1 + gPerFrame / 10)); 
-					if (ySpeed >= 6)
-						ySpeed = 6;
+					if (ySpeed >= 6.5)
+						ySpeed = 6.5f;
 				}
 				bounds.x = (int) (x + (width - bounds.width) / 2);
 				bounds.y = (int) (y + (height - bounds.height));
@@ -76,12 +77,12 @@ public abstract class Creature extends Entity {
 
 			public void moveXPlatforming() {
 				if(Game.getCurrentWorld().getTileManager().isCollidingInPosX(this)) { 
-					if (xSpeed > 0)
+					if (xSpeed >= 0)
 						xSpeed = 0;
 					lastAttackDirectionPressed = KeyEvent.VK_A;
 				} 
 				if (Game.getCurrentWorld().getTileManager().isCollidingInNegX(this)){
-					if (xSpeed < 0) 
+					if (xSpeed <= 0) 
 						xSpeed = 0;
 					lastAttackDirectionPressed = KeyEvent.VK_D;
 				}
@@ -146,7 +147,15 @@ public abstract class Creature extends Entity {
 	public float getxSpeed() {
 		return xSpeed;
 	}
+	
+	
 
+	public void setxSpeed(float xSpeed) {
+		this.xSpeed = xSpeed;
+	}
+	public void setySpeed(float ySpeed) {
+		this.ySpeed = ySpeed;
+	}
 	public float getySpeed() {
 		return ySpeed;
 	}

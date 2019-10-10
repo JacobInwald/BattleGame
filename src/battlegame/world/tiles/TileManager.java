@@ -76,30 +76,56 @@ public class TileManager {
 	}*/
 	
 	public boolean isCollidingInPosX(Entity e) {
-		for(int x = 0; x < Game.getCurrentWorld().getWidth(); x++) {
+		/*for(int x = 0; x < Game.getCurrentWorld().getWidth(); x++) {
 			for(int y = 0; y < Game.getCurrentWorld().getHeight(); y++) {
 				if (tiles[x][y].isSolid() && e.getBounds().intersects(bounds[x][y]) 
-					&& e.getBounds().x - (e.getBounds().width / 2) < bounds[x][y].getX() 
+					&& e.getBounds().x - (e.getBounds().width / 2) <= bounds[x][y].getX() - 7.5
 					&& ((e.getBounds().y + e.getBounds().height) >= bounds[x][y].y + 7.5
 					|| e.getBounds().y >= bounds[x][y].y + bounds[x][y].height - 7.5)){
 					return true;
 				}
 			}
+		}*/
+		//This first if statement makes sure that an array out of bounds exeption is not called while running this method.
+		
+		if((int)((e.getBounds().getX() + e.getBounds().width)/ Tile.tileWidth) >= Game.getCurrentWorld().getWidth()|| 
+				(int)(e.getBounds().getX() / Tile.tileWidth) < 0 || 
+				(int) ((e.getBounds().y + (e.getBounds().height)) / Tile.tileHeight) >= Game.getCurrentWorld().getHeight() ||
+				(int) ((e.getBounds().y) / Tile.tileHeight) < 0) 
+			return false;
+		
+		if ((tiles[(int)((e.getBounds().getX() + e.getBounds().width)/ Tile.tileWidth)][(int) ((e.getBounds().y) / Tile.tileHeight)].solid
+				|| (tiles[(int)((e.getBounds().getX() + e.getBounds().width)/ Tile.tileWidth)][(int) ((e.getBounds().y + e.getBounds().height - 7.5) / Tile.tileHeight)].solid))) {
+					return true;
 		}
 		return false;
 	}
 	
 	public boolean isCollidingInNegX(Entity e) {
-		for(int x = 0; x < Game.getCurrentWorld().getWidth(); x++) {
+		/*for(int x = 0; x < Game.getCurrentWorld().getWidth(); x++) {
 			for(int y = 0; y < Game.getCurrentWorld().getHeight(); y++) {
 				if (tiles[x][y].isSolid() && e.getBounds().intersects(bounds[x][y])
-					&& (bounds[x][y].getX() + (bounds[x][y].getWidth() / 2) < e.getBounds().x) 
+					&& (bounds[x][y].getX() + (bounds[x][y].getWidth() / 2) <= e.getBounds().x - 7.5) 
 					&& ((e.getBounds().y + e.getBounds().height) >= bounds[x][y].y + 7.5
 					|| e.getBounds().y >= bounds[x][y].y + bounds[x][y].height - 7.5)){
 					return true;
 				}
 			}
+		}*/
+		//This first if statement makes sure that an array out of bounds exeption is not called while running this method.
+
+		if((int)((e.getBounds().getX() + e.getBounds().width)/ Tile.tileWidth) >= Game.getCurrentWorld().getWidth()|| 
+				(int)(e.getBounds().getX() / Tile.tileWidth) < 0 || 
+				(int) ((e.getBounds().y + (e.getBounds().height)) / Tile.tileHeight) >= Game.getCurrentWorld().getHeight() ||
+				(int) ((e.getBounds().y) / Tile.tileHeight) < 0) 
+			return false;
+		
+		if ((tiles[(int) (e.getBounds().x / Tile.tileWidth)][(int) ((e.getBounds().y) / Tile.tileHeight)].solid) 
+				|| tiles[(int) (e.getBounds().x / Tile.tileWidth)][(int) ((e.getBounds().y + e.getBounds().height - 7.5) / Tile.tileHeight)].solid) {
+					return true;
 		}
+		
+		
 		return false;
 	}
 	
@@ -195,7 +221,7 @@ public class TileManager {
 
 		return false;
 	}
-
+	
 	public boolean returnTileBelowTurnsGravityOn(Entity e) {
 		//This first if statement makes sure that an array out of bounds exeption is not called while running this method.
 
@@ -204,6 +230,7 @@ public class TileManager {
 				(int) ((e.getBounds().y + (e.getBounds().height)) / Tile.tileHeight) >= Game.getCurrentWorld().getHeight() ||
 				(int) ((e.getBounds().y) / Tile.tileHeight) < 0) 
 			return true;
+		
 		// This statement checks if an entity is to the left of a ledge and if so, returns the gravityOn value of the tile that is to the left of the ledge
 		if ((tiles[(int) (e.getBounds().x / Tile.tileWidth)][(int) ((e.getBounds().y + (e.getBounds().height)) / Tile.tileHeight)].solid) 
 			&& !(tiles[(int)((e.getBounds().getX() + e.getBounds().width)/ Tile.tileWidth)][(int) ((e.getBounds().y + (e.getBounds().height)) / Tile.tileHeight)].solid)) {

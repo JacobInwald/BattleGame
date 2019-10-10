@@ -17,7 +17,7 @@ public class PlatformingPlayer extends Creature{
 		super(x, y, 48, 68, Assets.playerStandingForward);
 		health = 10;
 		walkingSpeed = 3.0F;
-		jumpSpeed = -6.0F;
+		jumpSpeed = -8.0F;
 		bounds.x = (int) x;
 		bounds.y = (int) (y - bounds.height);
 		bounds.height = 51;
@@ -41,12 +41,14 @@ public class PlatformingPlayer extends Creature{
 		else {
 			g.drawImage(texture, (int)x, (int)y, width, height);
 		}
-		//g.setFill(Color.RED);
+		g.setFill(Color.RED);
 		g.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
 	}
 	
 	public void getInput() {
 		if(Game.getKeyController().down) {
+				if(ySpeed < 0)
+					ySpeed = 0;
 				lastAttackDirectionPressed = KeyEvent.VK_S;
 				bounds.width = 30;
 				return;
